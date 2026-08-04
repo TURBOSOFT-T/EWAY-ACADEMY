@@ -142,26 +142,8 @@ $config = DB::table('configs')->first();
 
 
 
-                                <li class="nav-item submenu"><a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
-                                    <ul> @foreach ($formations as $formation )
-                                        <li class="nav-item"><a class="nav-link" href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}</a></li>
-
-                                        @endforeach
 
 
-                                    </ul>
-                                </li>
-
-
-                                <li class="nav-item submenu"><a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Services') }}</a>
-                                    <ul> @foreach ($services as $service )
-                                        <li class="nav-item"><a class="nav-link" href="{{ route('details-services', ['id' => $service->id, 'slug'=>Str::slug(Str::limit($service->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($service->titre) }}</a></li>
-
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                
-                             
 
 
                                 <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">
@@ -219,7 +201,7 @@ $config = DB::table('configs')->first();
                                 'en' => ['name' => 'English', 'flag' => 'https://img.icons8.com/color/20/great-britain-circular.png'],
                                 'de' => ['name' => 'Deutsch', 'flag' => 'https://img.icons8.com/color/20/germany-circular.png'],
                                 'es' => ['name' => 'Español', 'flag' => 'https://img.icons8.com/color/20/spain-circular.png'],
-                                    ];
+                                ];
                                 $currentLocale = app()->getLocale();
                                 @endphp
 

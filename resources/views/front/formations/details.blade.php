@@ -70,7 +70,7 @@
                            <div class="comment-one__btn-box">
                                 <a href="{{ route('formation.inscription',  $formation->id) }}"
                                     class="btn-default disabled">
-                                     {{ \App\Helpers\TranslationHelper::TranslateText('Demande de service') }}
+                                     {{ \App\Helpers\TranslationHelper::TranslateText('S\'inscrire') }}
                                     <span class="icon-arrow-right"></span>
                                  </a>
                             </div>
