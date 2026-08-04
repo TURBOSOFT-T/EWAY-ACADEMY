@@ -21,10 +21,7 @@
                     <select class="form-control" wire:model="statut">
                         <option value="">Etat</option>
                         <option value="créé">Créé</option>
-                        <option value="traitement">Traitement</option>
-                    {{--     <option value="Livraison">Livraison</option> --}}
-                        
-                        <option value="payée">Payée</option>
+                         <option value="payée">Payée</option>
                        
                         <option value="retournée">Retournée</option>
                     </select>

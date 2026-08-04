@@ -108,11 +108,7 @@
         </style>
 
      
-        <!--  A.hero-slide,
-.hero-slider-image {
-    width: 100%;
-}
-bout Us End -->
+ 
 
     <!-- Gallery Carousel Section Start -->
   <div class="gallery-carousel">
