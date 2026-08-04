@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('oex_results', function (Blueprint $table) {
+            $table->id();
+            
+         
+            $table->string('yes_ans');
+            $table->string('no_ans');
+             $table->integer('total_points')->default(0); // total des points obtenus
+ 
+            $table->unsignedBigInteger('exam_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->text('result_json')->nullable();
+
+            // Ajouter les clés étrangères
+            $table->foreign('exam_id')->references('id')->on('examens')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('oex_results');
+    }
+};

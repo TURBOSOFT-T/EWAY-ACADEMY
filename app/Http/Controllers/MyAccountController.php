@@ -1,0 +1,332 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\commandes;
+use App\Models\config;
+use App\Models\historiques_connexion;
+use App\Models\{produits, Category, Comment, Document, Examen, favoris as ModelsFavoris, Inscription, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, User_exam};
+use App\Models\User;
+use App\Models\views;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportUser;
+use App\Http\Traits\ListGouvernorats;
+use App\Models\clients;
+use App\Models\contenu_commande;
+use App\Models\domaines;
+use App\Models\notifications;
+use App\Models\templates;
+use Illuminate\Support\Facades\Session;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\{OrderChangeStatuts, ChangeStatut};
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\File;
+
+class MyAccountController extends Controller
+{
+    use ListGouvernorats;
+
+
+
+
+    public function comptes()
+    {
+
+        $commandes = commandes::where('user_id', auth()->id())->get();
+        return view('front.comptes.commandes', compact('commandes'));
+    }
+
+
+    public function profile()
+    {
+        return view('front.comptes.profile');
+    }
+
+
+    public function avatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $user = Auth::user();
+        if ($user->avatar) {
+            $oldAvatarPath = public_path('public/avatars/') . '/' . $user->avatar;
+            if (File::exists($oldAvatarPath)) {
+                File::delete($oldAvatarPath);
+            }
+        }
+
+        $avatarName = time() . '.' . $request->avatar->getClientOriginalExtension();
+
+        $request->avatar->move(public_path('public/avatars/'), $avatarName);
+
+        Auth()->user()->update(['avatar' => $avatarName]);
+
+        return back()->with('success', 'Avatar updated successfully.');
+    }
+    public function account()
+    {
+        $user = auth()->user();
+
+        // 🔍 Inscriptions avec relation formation, event, certification
+        $inscriptions = $user->inscriptions()
+            ->with(['event', 'formation', 'certification'])
+            ->paginate(10);
+
+        // 🔍 Extraire tous les IDs liés
+        $eventIds = $inscriptions->pluck('event_id')->filter()->unique();
+        $formationIds = $inscriptions->pluck('formation_id')->filter()->unique();
+        $certificationIds = $inscriptions->pluck('certification_id')->filter()->unique();
+
+        // 📅 Récupérer tous les cours en ligne liés à une de ces inscriptions
+        $onlineClasses = Online_classe::with(['events', 'formations', 'certifications'])
+            ->where(function ($query) use ($eventIds, $formationIds, $certificationIds) {
+                $query->whereIn('event_id', $eventIds)
+                    ->orWhereIn('formation_id', $formationIds)
+                    ->orWhereIn('certification_id', $certificationIds);
+            })
+            ->paginate(10);
+
+
+        $documents = Document::with(['events', 'formations', 'certifications'])
+            ->where(function ($query) use ($eventIds, $formationIds, $certificationIds) {
+                $query->whereIn('event_id', $eventIds)
+                    ->orWhereIn('formation_id', $formationIds)
+                    ->orWhereIn('certification_id', $certificationIds);
+            })
+            ->paginate(10);
+
+        $totalZoomMeetings = $onlineClasses->total();
+        $totalDocuments  = $documents->total();
+
+        $totalInscription = $user->inscriptions()
+            ->whereIn('statut', ['livrée', 'payée'])
+            ->count();
+
+        $totalcomments = $user->comments()->count();
+
+        $comments = $user->comments()
+            ->with('blog')
+            ->whereNotNull('blog_id')
+            ->paginate(10);
+
+        $commentaires = Comment::whereHas('blog', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+        $inscriptionsEnCours = $user->inscriptions()
+            ->whereIn('statut', ['attente', 'traitement', 'En cours livraison', 'planification'])
+            ->count();
+
+
+        $data['portal_exams'] = Examen::select(['examens.*', 'formations.titre as cat_name'])
+            ->join('formations', 'examens.formation_id', '=', 'formations.id')
+            ->orderBy('id', 'desc')->where('examens.status', '1')
+
+            ->get()->toArray();
+
+
+        $student_info
+            = User_exam::select(['user_exams.*', 'users.nom', 'examens.title', 'examens.exam_date'])
+            ->join('users', 'users.id', '=', 'user_exams.user_id')
+            ->join('examens', 'user_exams.exam_id', '=', 'examens.id')->orderBy('user_exams.exam_id', 'desc')
+            ->where('user_exams.user_id', auth()->id())
+            ->where('user_exams.std_status', '1')
+            ->get()->toArray();
+
+        $totalquizs = User_exam::where('user_id', auth()->id())
+            ->where('std_status', 1)
+            ->count();
+        //$student_info = User_exam::all();
+        //   dd($student_info);
+        return view('front.comptes.account', $data, compact(
+            'totalZoomMeetings',
+            'student_info',
+            'totalquizs',
+            'totalInscription',
+            'totalcomments',
+            'inscriptionsEnCours',
+            'comments',
+            'inscriptions',
+            'onlineClasses',
+            'totalDocuments',
+            'documents'
+        ));
+    }
+
+
+
+    public function delecomment($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+
+
+        return response()->json(['success' => true, 'message' => 'Commentaire supprimé avec succès.']);
+    }
+
+
+
+
+    //join exam page
+    public function join_exam($id)
+    {
+  $user = Auth::user();
+
+    // Récupérer les ids des formations où l'utilisateur est inscrit
+    $formationIds = $user->formations()->pluck('formations.id');
+
+        $question = Oex_question_master::where('exam_id', $id)
+            ->where('status', 1)
+            ->get();
+
+
+        $exam = Examen::where('id', $id)->get()->first();
+        $exams = Examen::whereIn('formation_id', $formationIds)
+                   ->where('status', 1) // uniquement les examens actifs
+                   ->with('formation') // charger la formation pour affichage
+                   ->get();
+        $totalPoints = $question->sum('points');
+        return view('front.comptes.join_exam', ['question' => $question, 'exam' => $exam, 'totalPoints' => $totalPoints]);
+    }
+
+
+
+    //On submit
+    public function submit_questions(Request $request)
+    {
+        $yes_ans = 0;
+        $no_ans = 0;
+        $totalPointsObtained = 0;
+        $data = $request->all();
+
+        $result = [];
+        //dd($request->all());
+        for ($i = 0; $i < $request->index; $i++) {
+            if (isset($data['question' . $i]) && isset($data['ans' . $i])) {
+                $q = Oex_question_master::find($data['question' . $i]);
+
+                if ($q && $q->ans == $data['ans' . $i]) {
+                    $result[$data['question' . $i]] = 'YES';
+                    $yes_ans++;
+                    $totalPointsObtained += $q->points;
+                } else {
+                    $result[$data['question' . $i]] = 'NO';
+                    $no_ans++;
+                }
+            }
+        }
+
+        $std_info = User_exam::where('user_id', auth()->id())
+            ->where('exam_id', $request->exam_id)
+            ->first();
+
+        if ($std_info) {
+            $std_info->exam_joined = 1;
+            $std_info->save();
+        }
+
+        $res = new Oex_result();
+        $res->exam_id = $request->exam_id;
+        $res->user_id = auth()->id();
+        $res->yes_ans = $yes_ans;
+        $res->no_ans = $no_ans;
+        $res->total_points = $totalPointsObtained;
+        $res->result_json = json_encode($result);
+        $res->save();
+
+        return redirect(url('account'))->with('success', 'Examen soumis avec succès !');
+    }
+
+
+
+
+    //Applying for exam
+
+
+
+    public function apply_exam($id)
+    {
+        $checkuser = User_exam::where('user_id', auth()->id())
+            ->where('exam_id', $id)
+            ->first();
+
+        if ($checkuser) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Already applied, see your exam section'
+            ]);
+        }
+
+        User_exam::create([
+            'user_id' => auth()->id(),
+            'exam_id' => $id,
+            'std_status' => 1,
+            'exam_joined' => 0,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Applied successfully',
+
+            'reload' => route('account')
+        ]);
+    }
+
+
+
+
+    //View Result
+
+    // View Result
+
+    public function view_result($id)
+    {
+
+
+        $data['result_info'] = Oex_result::where('exam_id', $id)->where('user_id', auth()->id())->get()->first();
+
+        $data['student_info'] = User::where('id', auth()->id())->get()->first();
+
+        $data['exam_info'] = Examen::where('id', $id)->get()->first();
+        $total = 0;
+
+        $result_info = Oex_result::where('exam_id', $id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($result_info) {
+            $resultData = json_decode($result_info->result_json, true);
+
+            foreach ($resultData as $questionId => $status) {
+                if ($status === 'YES') {
+                    $question = Oex_question_master::find($questionId);
+                    if ($question) {
+                        $total += $question->points; // addition des points de chaque question correcte
+                    }
+                }
+            }
+        }
+
+
+
+        //dd($data);
+        return view('front.comptes.view_result', $data, compact('total'));
+    }
+
+
+    //View answer
+    public function view_answer($id)
+    {
+
+        $data['question'] = Oex_question_master::where('exam_id', $id)->get()->toArray();
+
+        return view('front.comptes.view_amswer', $data);
+    }
+}
