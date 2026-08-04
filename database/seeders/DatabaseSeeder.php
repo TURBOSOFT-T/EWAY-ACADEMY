@@ -213,7 +213,7 @@ class DatabaseSeeder extends Seeder
     //  $cat->frais = '15';
     $cat->description = 'Bienvenue à EWAY-ACADEMY, votre passerelle linguistique vers l\'intégration au Canada.';
     $cat->telephone = '672553378';
-    $cat->email = 'EWAY-ACADEMY@gmail.com';
+    $cat->email = 'contact@eway-academy.com';
     $cat->addresse = '168 boul. Saint-Jean Douala Cameroun';
 
     $cat->save();
