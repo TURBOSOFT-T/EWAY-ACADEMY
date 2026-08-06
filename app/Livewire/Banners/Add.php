@@ -21,7 +21,7 @@ class Add extends Component
     public function save()
     {
         $this->validate([
-            'titre' => 'required|string|max:520',
+            'titre' => 'nullable|string|max:520',
             'sous_titre' => 'nullable|string|max:250',
           
             
