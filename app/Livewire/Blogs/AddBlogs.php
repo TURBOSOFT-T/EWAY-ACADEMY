@@ -26,7 +26,7 @@ class AddBlogs extends Component
             $this->blog = $blog;
             $this->title = $blog->title;
            
-            $this->category_id = $blog->category_id;
+         //   $this->category_id = $blog->category_id;
          
           //  $this->reference = $blogs->reference;
           
@@ -54,7 +54,7 @@ class AddBlogs extends Component
            
            'image' =>  'sometimes|nullable|file|mimetypes:image/*',
          
-            'category_id' => 'required|integer|exists:categories,id',
+         //   'category_id' => 'required|integer|exists:categories,id',
             
           
        
@@ -68,7 +68,7 @@ class AddBlogs extends Component
           ];
 
 
-        $categories = Category::findOrFail($data[('category_id')]);
+      //  $categories = Category::findOrFail($data[('category_id')]);
 
         $blog = new Blog();
         $blog->title = $this->title;
@@ -79,7 +79,7 @@ class AddBlogs extends Component
    //     $blogs->reference = $this->reference;
        
 
-        $blog->category_id = $this->category_id;
+     ////   $blog->category_id = $this->category_id;
     
 
 
@@ -93,7 +93,8 @@ class AddBlogs extends Component
         } */
         // $blogs->save();
 
-        $categories->blogs()->save($blog);
+      //  $categories->blogs()->save($blog);
+      $blog->save();
       //  $users = User::where('role', 'client')->get();;
     $users = Subscriber:: all();
 
@@ -120,7 +121,7 @@ foreach ($users as $user) {
            
           //  'image' =>  'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
          
-            'category_id' => 'required|integer|exists:categories,id',
+         //   'category_id' => 'required|integer|exists:categories,id',
             
           
        
@@ -140,7 +141,7 @@ foreach ($users as $user) {
             $this->blog->meta_description = $this->meta_description;
         
           
-            $this->blog->category_id = $this->category_id;
+         //   $this->blog->category_id = $this->category_id;
           
         
 
@@ -170,8 +171,8 @@ foreach ($users as $user) {
 
     public function render()
     {
-        $categories = Category::all();
-        return view('livewire.blogs.add-blogs', compact('categories'));
+        
+        return view('livewire.blogs.add-blogs');
     }
 
     
