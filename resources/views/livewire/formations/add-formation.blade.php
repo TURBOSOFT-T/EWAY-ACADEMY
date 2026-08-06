@@ -21,17 +21,6 @@
                     <div class="col-sm-6">
                         <div class="mb-3">
                             <label for="name" class="form-label">
-                                Date debut *
-                            </label>
-                            <input type="date" id="titre" wire:model="date_debut" class="form-control">
-                            @error('date_debut')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">
                                 Image
                             </label>
                             <input type="file" class="form-control" wire:model="image" accept="image/*">

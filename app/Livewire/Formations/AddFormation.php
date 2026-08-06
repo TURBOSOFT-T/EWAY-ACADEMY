@@ -81,7 +81,7 @@ class AddFormation extends Component
 
         $formation->category_id = $this->category_id;
         $formation->meta_description = $this->meta_description;
-        $formation->date_debut = $this->date_debut;
+     //   $formation->date_debut = $this->date_debut;
       //  $formation->type = $this->type;
 
 
