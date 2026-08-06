@@ -1,11 +1,7 @@
 <div>
     <div>
 
-        @if (session()->has('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
+     
         <form wire:submit.prevent="create">
             <div class="modal-body">
                 @include('components.alert')
