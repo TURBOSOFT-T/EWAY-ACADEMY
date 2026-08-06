@@ -1,93 +1,93 @@
-@extends('layouts.formation')
-@php
-    $title = \App\Helpers\TranslationHelper::TranslateText('Formations');
-    $subtitle = \App\Helpers\TranslationHelper::TranslateText('Formations');
-@endphp
-@php
-    $config = DB::table('configs')->first();
-
-           
-           
-        
-
-@endphp
-@section('title', \App\Helpers\TranslationHelper::TranslateText('Formations'))
+@extends('front.fixe')
+@section('titre', 'Formations')
 @section('body')
+@php
+$config = DB::table('configs')->first();
 
-<x-strickyHeader/>
-<x-sidebar/>
+@endphp
+<!-- Page Header Start -->
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Page Header Box Start -->
+                <div class="page-header-box">
+                    <h1 class="text-anime-style-2" data-cursor="-opaque">
+                        {{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}
 
-        <!--Blog Page Start-->
-        <section class="blog-page">
-            <div class="container">
-                <div class="row">
-                    <!--Blog One Single Start-->
-                    @foreach ($formations as $formation )
-                    <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay="100ms">
-                        <div class="blog-one__single">
-                            <div class="blog-one__img">
-                                <img src="{{ Storage::url($formation->image) }}" style="width: 400px; height: 300px; object-fit: cover;" alt="">
-                                <div class="blog-one__hover">
-                                    <a  href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">
-                                        <div class="blog-one__hover-icon-1">
-                                            <span class="blog-one__hover-icon-2"></span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="blog-one__content">
-                                <ul class="blog-one__meta list-unstyled">
-                                    <li>
-                                        <a href="#"><span class="icon-user"></span>By admin</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><span class="icon-calendar"></span>{{ $formation->created_at }}</a>
-                                    </li>
-                                </ul>
-                                <h3 class="blog-one__title"><a   href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}"> {{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}</a></h3>
-                                <div class="blog-one__btn-box-two">
-                                    <a  href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}" class="blog-one__btn-2 thm-btn">
-                                         {{ \App\Helpers\TranslationHelper::TranslateText('Voir plus') }}
-                                        <span
-                                            class="icon-arrow-right"></span>
-                                    </a>
-                                </div>
-                            </div>
+                    </h1>
+                    <nav class="wow fadeInUp">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="./">
+                                {{ \App\Helpers\TranslationHelper::TranslateText('Accueil') }}
+                            </a></li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                {{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- Page Header Box End -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Page Blog Start -->
+<div class="page-blog">
+    <div class="container">
+        <div class="row">
+            @foreach ($formations as $formation )
+            <div class="col-lg-4 col-md-6">
+                <!-- Blog Item Start -->
+                <div class="blog-item wow fadeInUp">
+                    <!-- Post Featured Image Start-->
+                    <div class="post-featured-image" data-cursor-text="View">
+                        <figure>
+                            <a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}" class="image-anime">
+                                <img src="{{ Storage::url($formation->image) }}" alt="">
+                            </a>
+                        </figure>
+                    </div>
+                    <!-- Post Featured Image End -->
+
+                    <!-- post Item Content Start -->
+                    <div class="post-item-content">
+                        <!-- post Item Body Start -->
+                        <div class="post-item-body">
+                            <h2><a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}"> {{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}</a></h2>
                         </div>
+                        <!-- Post Item Body End-->
+
+                        <!-- Post Item Footer Start-->
+                        <div class="post-item-footer">
+
+
+                            <a class="readmore-btn" href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}" class="blog-one__btn-2 thm-btn">
+                                {{ \App\Helpers\TranslationHelper::TranslateText('Voir plus') }}
+                                <span
+                                    class="icon-arrow-right"></span>
+                            </a>
+                        </div>
+                        <!-- Post Item Footer End-->
                     </div>
-                    @endforeach
-                    <!--Blog One Single End-->
-                 
-                 
+                    <!-- post Item Content End -->
+                </div>
+                <!-- Blog Item End -->
             </div>
-        </section>
-        <!--Blog Page End-->
+            @endforeach
 
 
 
-        <!--CTA One Start-->
-            <section class="cta-one">
-            <div class="container">
-                   <div class="cta-one__inner">
-                <h3 class="cta-one__title">
-                    {{ \App\Helpers\TranslationHelper::TranslateText('Vous souhaitez bénéficier d\'offres spéciales') }}
-                    <br>
-                    
-                {{ \App\Helpers\TranslationHelper::TranslateText(' et mises à jour des formations?') }}
-                </h3>
-                <form  id="newsletter-form" class="cta-one__form mc-form"  action="{{ route('newsletter.subscribe') }}" method="POST" >
-                    <div class="cta-one__form-input-box">
-                        <input type="email" id="newsletter-email" placeholder="{{ \App\Helpers\TranslationHelper::TranslateText('Entrez votre email') }}" name="email">
-                        <button type="submit" id="submit-btn" class="cta-one__btn"><span class="icon-paper-plan"></span></button>
-                    </div>
-                </form>
-            </div>
-            </div>
-        </section>
-        <!--CTA One End-->
 
-<x-footer2 />
-<x-mobileMenu/>
-<x-searchPopup/>
-<x-scroll-to-top/>
+        </div>
+
+    </div>
+</div>
+<!-- Page Blog End -->
+
+<!-- Our Scrolling Ticker Section Start -->
+
+<!-- Scrolling Ticker Section End -->
 @endsection

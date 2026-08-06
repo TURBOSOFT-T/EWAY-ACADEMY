@@ -140,15 +140,34 @@ $config = DB::table('configs')->first();
                                     </a>
                                 </li>
 
-                                <li class="nav-item submenu"><a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
-                                    <ul> @foreach ($formations as $formation )
+                                <!-- <li class="nav-item submenu"><a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
+                                    <ul>
+                                        @foreach ($formations as $formation )
                                         <li class="nav-item"><a class="nav-link" href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}</a></li>
 
                                         @endforeach
 
 
                                     </ul>
+                                </li> -->
+
+
+
+
+                                <li class="nav-item submenu">
+                                    <a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
+                                    <ul>
+                                        @foreach ($categories as $category)
+                                        <li>
+                                            <a class="nav-link" href="/category_formation/{{ $category->id }}">
+                                                {{ \App\Helpers\TranslationHelper::TranslateText($category->nom) }}
+                                            </a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
                                 </li>
+
+
 
 
                                 <li class="nav-item submenu">

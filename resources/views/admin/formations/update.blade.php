@@ -60,6 +60,22 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="">Categorie </label>
+                              
+                                <select name='category_id' class="form-control @error('category_id') is-invalid @enderror">
+                                    <option value=""></option>
+                                    @foreach ($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ old('category_id', $formation->category_id) == $cat->id ? 'selected' : '' }}>
+                                        {{ $cat->nom }}
+                                    </option>
+                                    @endforeach
+                                </select>
+
+                                @error('category_id')
+                                <span class="text-danger small"> {{ $message }} </span>
+                                @enderror
+                            </div>
 
                             <div class="mb-3">
                                 <label for="type">Type de formation</label>

@@ -60,9 +60,9 @@ class FormationController extends Controller
             $message = "Actualité non disponible !";
             abort(404, $message);
         } 
-     
+        $categories = Category::all();
      //  dd($formation);
-        return view('admin.formations.update', compact('formation'));
+        return view('admin.formations.update', compact('formation', 'categories'));
     }
 
       
@@ -73,7 +73,7 @@ class FormationController extends Controller
           
            'image' => 'sometimes|required|file|mimetypes:image/*',
             'titre' => 'required|string|max:255',
-        //    'category_id' => 'required|integer|exists:categories,id',
+            'category_id' => 'required|integer|exists:categories,id',
               'type' => 'required|in:formation,traduction,etudes',
             
 
