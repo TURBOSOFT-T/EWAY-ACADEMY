@@ -23,6 +23,7 @@ $config = DB::table('configs')->first();
                             </a></li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 {{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}
+                               
                             </li>
                         </ol>
                     </nav>

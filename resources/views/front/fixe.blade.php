@@ -5,7 +5,6 @@ $config = DB::table('configs')->first();
 @endphp
 <!doctype html>
 
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,9 +12,6 @@ $config = DB::table('configs')->first();
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="EWAY-ACADEMY : votre passerelle linguistique vers une intégration réussie au Canada. Formations en français, préparation aux tests officiels et accompagnement pour vos projets d'études ou d'immigration.">
-
-
-
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ Storage::url($config->icon) }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ Storage::url($config->icon) }}">
@@ -51,54 +47,161 @@ $config = DB::table('configs')->first();
     @yield('services')
     @yield('blogs')
     @yield('offres')
-
-
     @livewireStyles
 </head>
 
-
-
-
 <body>
 
-    <!-- Topbar Section Start -->
-    {{-- <div class="topbar">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-9 col-md-12">
-                   
-                    <div class="topbar-contact-info">
-                        <ul>
-                            <li class="contact-item">
-                                <a href="https://wa.me/{{ preg_replace('/\D/', '', $config->telephone) }}" target="_blank">
-    <img src="images/icon-phone.svg" alt="">
-    <span>{{ $config->telephone }}</span>
-    </a>
-    </li>
-    <li class="contact-item">
-        <a href="mailto:{{ $config->email }}">
-            <img src="images/icon-mail.svg" alt="">
-            <span>{{ $config->email }}</span>
-        </a>
-    </li>
-    <li class="hide-mobile"><a href="#"><img src="images/icon-location.svg" alt=""> {{ $config->addresse }}</a></li>
-    </ul>
-    </div>
 
-    </div>
+    <style>
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding: 0px;
+        }
 
-    <div class="col-lg-3 col-md-0">
+        .nav-brand img {
+            height: 90px;
+            width: 80px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            margin-top: -11px;
+        }
 
-        <div class="topbar-social-links">
+        @media (max-width: 768px) {
+            .nav-brand img {
+                height: 100px;
+                width: 100px;
+                margin-top: 30;
+                padding: 10;
+                margin-left: 20px;
 
-        </div>
 
-    </div>
-    </div>
-    </div>
-    </div> --}}
-    <!-- Topbar Section End -->
 
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 2em;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+
+        .nav-brand:hover img {
+            transform: scale(1.6);
+        }
+
+
+        .navbar .nav-brand {
+            padding: 5px;
+        }
+
+        .navbar .nav-brand img {
+            max-height: 50px;
+        }
+    </style>
+
+
+    <style>
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14px;
+            font-weight: normal;
+            color: #003DA5;
+            cursor: pointer;
+            padding: 8px 12px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            border-radius: 6px;
+        }
+
+        .dropdown-content .dropdown-item {
+            background-color: white;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 10px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #000;
+            /* Texte en noir */
+        }
+
+        .dropdown-content .dropdown-item img {
+            margin-right: 8px;
+        }
+
+        .dropdown-content .dropdown-item:hover {
+            background-color: #f2f2f2;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #eef4ee;
+        }
+
+        /* 📱 Mobile (<768px) */
+        @media (max-width: 768px) {
+            .dropbtn {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .dropdown-content {
+                position: fixed;
+                top: 60px;
+                right: 0;
+                width: 70%;
+                max-width: 280px;
+                border-radius: 0 0 0 10px;
+                box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .dropdown-content .dropdown-item {
+                font-size: 16px;
+                padding: 14px 20px;
+                color: #000;
+                /* Texte en noir */
+            }
+        }
+    </style>
+
+    <style>
+        .logo-small {
+            width: 100px;
+            height: 100px;
+        }
+
+        .logo-footer {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
 
     <!-- Header Start -->
     <header class="main-header">
@@ -106,19 +209,8 @@ $config = DB::table('configs')->first();
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
 
-                    <style>
-                        .logo-small {
-                            width: 100px;
-                            height: 100px;
-                        }
-
-                        .logo-footer {
-                            width: 100px;
-                            height: 100px;
-                        }
-                    </style>
                     <!-- Logo Start -->
-                    <a class="navbar-brand" href="./">
+                    <a class="navbar-brand nav-brand" href="./">
                         <img src="{{ Storage::url($config->logo) }}" class="logo-small" alt="Logo">
                     </a>
                     <!-- Logo End -->
@@ -139,21 +231,6 @@ $config = DB::table('configs')->first();
 
                                     </a>
                                 </li>
-
-                                <!-- <li class="nav-item submenu"><a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
-                                    <ul>
-                                        @foreach ($formations as $formation )
-                                        <li class="nav-item"><a class="nav-link" href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}</a></li>
-
-                                        @endforeach
-
-
-                                    </ul>
-                                </li> -->
-
-
-
-
                                 <li class="nav-item submenu">
                                     <a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Formations') }}</a>
                                     <ul>
@@ -166,10 +243,6 @@ $config = DB::table('configs')->first();
                                         @endforeach
                                     </ul>
                                 </li>
-
-
-
-
                                 <li class="nav-item submenu">
                                     <a class="nav-link" href="#">{{ \App\Helpers\TranslationHelper::TranslateText('Services') }}</a>
                                     <ul>
@@ -182,22 +255,15 @@ $config = DB::table('configs')->first();
                                         @endforeach
                                     </ul>
                                 </li>
-
-
-
                                 <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">
                                         {{ \App\Helpers\TranslationHelper::TranslateText('Contact') }}
                                     </a></li>
 
                                 @guest
-
-
                                 <li class="nav-item">
                                     <a href="{{ url('login') }}">Connexion</a>
                                 </li>
                                 @else
-
-
                                 <li class="nav-item submenu"><a class="nav-link" href="#">
                                         @if (auth()->user()->role != 'client')
                                         Dashboard
@@ -229,9 +295,6 @@ $config = DB::table('configs')->first();
 
                                     </ul>
                                 </li>
-
-
-
                                 @endguest
 
                                 @php
@@ -266,216 +329,9 @@ $config = DB::table('configs')->first();
                                         </form>
                                     </div>
                                 </li>
+                            </ul>
 
-                                <style>
-                                    .custom-dropdown {
-                                        position: relative;
-                                        display: inline-block;
-                                    }
-
-                                    .dropbtn {
-                                        display: flex;
-                                        align-items: center;
-                                        gap: 6px;
-                                        background: none;
-                                        border: none;
-                                        font-family: 'Times New Roman', Times, serif;
-                                        font-size: 14px;
-                                        font-weight: normal;
-                                        color: #003DA5;
-                                        cursor: pointer;
-                                        padding: 8px 12px;
-                                    }
-
-                                    .dropdown-content {
-                                        display: none;
-                                        position: absolute;
-                                        background-color: #fff;
-                                        min-width: 160px;
-                                        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-                                        z-index: 999;
-                                        border-radius: 6px;
-                                    }
-
-                                    .dropdown-content .dropdown-item {
-                                        background-color: white;
-                                        border: none;
-                                        width: 100%;
-                                        text-align: left;
-                                        padding: 10px 16px;
-                                        cursor: pointer;
-                                        display: flex;
-                                        align-items: center;
-                                        font-size: 14px;
-                                        color: #000;
-                                        /* Texte en noir */
-                                    }
-
-                                    .dropdown-content .dropdown-item img {
-                                        margin-right: 8px;
-                                    }
-
-                                    .dropdown-content .dropdown-item:hover {
-                                        background-color: #f2f2f2;
-                                    }
-
-                                    .dropdown:hover .dropdown-content {
-                                        display: block;
-                                    }
-
-                                    .dropdown:hover .dropbtn {
-                                        background-color: #eef4ee;
-                                    }
-
-                                    /* 📱 Mobile (<768px) */
-                                    @media (max-width: 768px) {
-                                        .dropbtn {
-                                            font-size: 12px;
-                                            padding: 8px;
-                                        }
-
-                                        .dropdown-content {
-                                            position: fixed;
-                                            top: 60px;
-                                            right: 0;
-                                            width: 70%;
-                                            max-width: 280px;
-                                            border-radius: 0 0 0 10px;
-                                            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-                                        }
-
-                                        .dropdown-content .dropdown-item {
-                                            font-size: 16px;
-                                            padding: 14px 20px;
-                                            color: #000;
-                                            /* Texte en noir */
-                                        }
-                                    }
-                                </style>
-
-                                {{--
-                                <li>
-
-                                    <div class="custom-dropdown">
-                                        <form action="{{ route('locale.change') }}" method="POST">
-                                @csrf
-                                <div class="dropdown">
-                                    <button class="dropbtn" style="display: flex; align-items: center; gap: 6px; background: none; border: none; font-family: 'Times New Roman', Times, serif; font-size: 14px; font-weight: normal; color: #003DA5; cursor: pointer;">
-                                        @if (app()->getLocale() == 'fr')
-                                        <img src="https://img.icons8.com/color/20/france-circular.png" alt="fr">
-                                        Français
-                                        @elseif(app()->getLocale() == 'en')
-                                        <img src="https://img.icons8.com/color/20/great-britain-circular.png" alt="en">
-                                        English
-                                        @elseif(app()->getLocale() == 'de')
-                                        <img src="https://img.icons8.com/color/20/germany-circular.png" alt="de">
-                                        Deutsch
-                                        @elseif(app()->getLocale() == 'es')
-                                        <img src="https://img.icons8.com/color/20/spain-circular.png" alt="es"> Español
-                                        @elseif(app()->getLocale() == 'zh')
-                                        <img src="https://img.icons8.com/color/20/china-circular.png" alt="zh"> 中文
-                                        @else
-                                        <img src="https://img.icons8.com/color/20/france-circular.png" alt="fr">
-                                        Français
-                                        @endif
-
-                                    </button>
-                                    <div class="dropdown-content">
-                                        <button type="submit" name="locale" value="fr" class="dropdown-item">
-                                            <img src="https://img.icons8.com/color/20/france-circular.png" alt="fr">
-                                            Français
-                                        </button>
-                                        <button type="submit" name="locale" value="en" class="dropdown-item">
-                                            <img src="https://img.icons8.com/color/20/great-britain-circular.png" alt="en">
-                                            English
-                                        </button>
-                                        <button type="submit" name="locale" value="de" class="dropdown-item">
-                                            <img src="https://img.icons8.com/color/20/germany-circular.png" alt="de">
-                                            Deutsch
-                                        </button>
-                                        <button type="submit" name="locale" value="es" class="dropdown-item">
-                                            <img src="https://img.icons8.com/color/20/spain-circular.png" alt="es"> Español
-                                        </button>
-                                        <button type="submit" name="locale" value="zh" class="dropdown-item">
-                                            <img src="https://img.icons8.com/color/20/china-circular.png" alt="zh"> 中文
-                                        </button>
-
-                                    </div>
-                                </div>
-                                </form>
                         </div>
-
-
-
-                        <style>
-                            .custom-dropdown {
-                                position: relative;
-                                display: inline-block;
-
-
-                            }
-
-                            .dropbtn {
-                                background-color: #f7fef7;
-                                color: white;
-                                padding: 10px;
-                                font-size: 16px;
-                                border: none;
-                                cursor: pointer;
-                            }
-
-                            .dropdown-content {
-                                display: none;
-                                position: absolute;
-                                background-color: #f9f9f9;
-                                min-width: 160px;
-                                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-                                z-index: 1;
-                            }
-
-                            .dropdown-content .dropdown-item {
-                                background-color: white;
-                                border: none;
-                                width: 100%;
-                                text-align: left;
-                                padding: 8px 16px;
-                                cursor: pointer;
-                                display: flex;
-                                align-items: center;
-                            }
-
-                            .dropdown-content .dropdown-item img {
-                                margin-right: 8px;
-                            }
-
-                            .dropdown-content .dropdown-item:hover {
-                                background-color: #f8f3f3;
-                            }
-
-                            .dropdown:hover .dropdown-content {
-                                display: block;
-                            }
-
-                            .dropdown:hover .dropbtn {
-                                background-color: #eef4ee;
-                            }
-
-                            /* Responsive adjustments */
-                            @media (max-width: 600px) {
-                                .dropbtn {
-                                    font-size: 10px;
-                                    padding: 8px;
-                                }
-
-                                .dropdown-content .dropdown-item {
-                                    font-size: 14px;
-                                    padding: 5px 10px;
-                                }
-                            }
-                        </style>
-
-                        </li>
-                        --}} </ul>
                     </div>
                     <!-- Let’s Start Button Start -->
                     <div class="header-btn d-inline-flex">
@@ -487,8 +343,9 @@ $config = DB::table('configs')->first();
                 </div>
                 <!-- Main Menu End -->
                 <div class="navbar-toggle"></div>
+            </nav>
         </div>
-        </nav>
+
         <div class="responsive-menu"></div>
         </div>
     </header>

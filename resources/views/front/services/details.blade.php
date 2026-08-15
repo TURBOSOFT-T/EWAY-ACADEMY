@@ -1,33 +1,32 @@
-
 @extends('front.fixe')
 @section('titre', $service->nom)
 @section('body')
-  @php
-    $config = DB::table('configs')->first();
-    
-    @endphp
+@php
+$config = DB::table('configs')->first();
 
-    <main>
+@endphp
 
-        <head>
-    @section('services')
-      <meta name="author" content="eway-academy.com">
+<main>
+
+    <head>
+        @section('services')
+        <meta name="author" content="eway-academy.com">
         <meta property="og:title" content="{{ $service->nom }}">
         <meta property="og:description" content="{{ $service->description ?? '' }}">
-         <meta property="og:meta_description" content="{{ $service->meta_description ?? '' }}">
+        <meta property="og:meta_description" content="{{ $service->meta_description ?? '' }}">
         <meta property="og:image" content="{{ $service->image }}">
-        
+
         <meta name="robots" content="index, follow">
-    @endsection
-    
-</head>
+        @endsection
+
+    </head>
 
 
 
 
     <!-- Page Header Start -->
-	
-	<!-- Page Header End -->
+
+    <!-- Page Header End -->
 
     <!-- Page Service Single Start -->
     <div class="page-service-single">
@@ -49,17 +48,17 @@
                             <h3 class="wow fadeInUp">{{ \App\Helpers\TranslationHelper::TranslateText($service->nom) }}</h3>
 
                             <p class="wow fadeInUp" data-wow-delay="0.2s">
-                              
-                            {!! \App\Helpers\TranslationHelper::TranslateText($service->meta_description) !!}
-                           </p>
-                            
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">
-                              
-                            {!! \App\Helpers\TranslationHelper::TranslateText($service->description) !!}
-                           </p>
-                            
 
-                          
+                                {!! \App\Helpers\TranslationHelper::TranslateText($service->meta_description) !!}
+                            </p>
+
+                            <p class="wow fadeInUp" data-wow-delay="0.2s">
+
+                                {!! \App\Helpers\TranslationHelper::TranslateText($service->description) !!}
+                            </p>
+
+
+
                             <!-- Service Entry Image End -->
                         </div>
                         <!-- Service Entry Content End -->
@@ -75,7 +74,7 @@
                             <ul> @foreach ($services as $service)
                                 <li><a href="{{ route('details-services', ['id' => $service->id, 'slug'=>Str::slug(Str::limit($service->nom, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($service->nom ?? ' ')  }}</a></li>
                                 @endforeach
-                               
+
                             </ul>
                         </div>
                         <!-- Service Categories List End -->
@@ -92,7 +91,7 @@
                         <!-- Opening Hour Section End -->
 
                         <!-- Sidebar Cta Box Start -->
-               
+
                         <!-- Sidebar Cta Box End -->
                     </div>
                     <!-- Service Sidebar End -->
@@ -101,25 +100,24 @@
         </div>
     </div>
     <!-- Page Service Single End -->
-    
+
     <!-- Our Scrolling Ticker Section Start -->
-{{--    <div class="our-scrolling-ticker">
+    {{-- <div class="our-scrolling-ticker">
             
                 <div class="scrolling-ticker-box">
                     <div class="scrolling-content">
                         <span><img src="images/icon-sparkles.svg" alt="">Emergency No. : {{ $config->telephone }}</span>
-                        <span><img src="images/icon-sparkles.svg" alt="">For any additional inqueries :
-                            {{ $config->email }}</span>
-                        <span><img src="images/icon-sparkles.svg" alt="">Book Appointment: {{ $config->telephone }}</span>
-                        <span><img src="images/icon-sparkles.svg" alt="">Working Hourse : Mon to Fri : 10:00 To
-                            6:00 </span>
-                    </div>
+    <span><img src="images/icon-sparkles.svg" alt="">For any additional inqueries :
+        {{ $config->email }}</span>
+    <span><img src="images/icon-sparkles.svg" alt="">Book Appointment: {{ $config->telephone }}</span>
+    <span><img src="images/icon-sparkles.svg" alt="">Working Hourse : Mon to Fri : 10:00 To
+        6:00 </span>
+    </div>
 
-                    
-                </div>
-            </div> --}}
-	<!-- Scrolling Ticker Section End -->  
 
-    </main>
-    @endsection
-    
+    </div>
+    </div> --}}
+    <!-- Scrolling Ticker Section End -->
+
+</main>
+@endsection

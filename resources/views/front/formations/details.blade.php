@@ -86,8 +86,8 @@ $config = DB::table('configs')->first();
                     <!-- Service Categories List Start -->
                     <div class="service-catagery-list wow fadeInUp">
                         {{-- <h3>{{ \App\Helpers\TranslationHelper::TranslateText(' Tous les formations')  }}</h3>
-                        <ul> @foreach ($formations as $formation)
-                            <li><a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($formation->titre ?? ' ')  }}</a></li>
+                        <ul> @foreach ($categories as $category)
+                            <li><a   href="/category_formation/{{ $category->id }}">{{ \App\Helpers\TranslationHelper::TranslateText($category->nom ?? ' ')  }}</a></li>
                             @endforeach
 
                         </ul> --}}
@@ -108,8 +108,8 @@ $config = DB::table('configs')->first();
                                 <li>sun : closed</li>
                             </ul> --}}
                         <h3>{{ \App\Helpers\TranslationHelper::TranslateText(' Les autres formations')  }}</h3>
-                        <ul> @foreach ($formations as $formation)
-                            <li><a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) , }}">{{ \App\Helpers\TranslationHelper::TranslateText($formation->titre ?? ' ')  }}</a></li>
+                        <ul> @foreach ($categories as $category)
+                            <li><a   href="/category_formation/{{ $category->id }}">{{ \App\Helpers\TranslationHelper::TranslateText($category->nom ?? ' ')  }}</a></li>
                             @endforeach
 
                         </ul>

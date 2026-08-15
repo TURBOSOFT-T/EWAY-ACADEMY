@@ -19,7 +19,7 @@ class HomeComposer
       'services' => Service::select('*')->latest()->take(10)->get(),
         'sposors' => Sponsor::select('*')->latest()->take(100)->get(),
       'videos ' => Video::select('*')->latest()->take(10)->get(),
-      'formations' => Formation::select('*')->latest()->take(6)->get(),
+      'formations' => Formation::select('*')->latest()->take(9)->get(),
       'enventfooter' => Event::select('*')->latest()->take(2)->get(),
       'testimonials' => Testimonial::orderBy('created_at', 'desc')
         ->where('active', '1')

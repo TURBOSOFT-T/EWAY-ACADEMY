@@ -13,7 +13,7 @@
             {{-- <h3 class="wow fadeInUp">theraphist team</h3> --}}
             <h2 class="text-anime-style-2" data-cursor="-opaque">
 
-                {{ \App\Helpers\TranslationHelper::TranslateText('Pacourrir nos guides pour les formations ') }}
+                {{ \App\Helpers\TranslationHelper::TranslateText(' Nos Formations') }}
             </h2>
         </div>
         <!-- Section Title End -->
@@ -24,16 +24,16 @@
     </div>
 </div>
         <div class="row">
-            @foreach ($formations as $formation )
+            @foreach ($categories as $category )
             <div class="col-lg-4 col-md-6">
                 <!-- Blog Item Start -->
                 <div class="blog-item wow fadeInUp">
                     <!-- Post Featured Image Start-->
                     <div class="post-featured-image" data-cursor-text="View">
                         <figure>
-                            <a href="#" class="image-anime">
+                            <a  href="/category_formation/{{ $category->id }}"class="image-anime">
                                
-                                     <img src="{{ Storage::url($formation->image) }}" {{-- width="200" height="200" --}} alt="">
+                                     <img src="{{ Storage::url($category->photo) }}" {{-- width="200" height="200" --}} alt="">
                  
                             </a>
                         </figure>
@@ -44,15 +44,15 @@
                     <div class="post-item-content">
                         <!-- post Item Body Start -->
                         <div class="post-item-body">
-                            <h2><a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) }}">
-                                {{ \App\Helpers\TranslationHelper::TranslateText($formation->titre) }}
+                            <h2><a  href="/category_formation/{{ $category->id }}">
+                                {{ \App\Helpers\TranslationHelper::TranslateText($category->nom) }}
                             </a></h2>
                         </div>
                         <!-- Post Item Body End-->
 
                         <!-- Post Item Footer Start-->
                         <div class="post-item-footer">
-                            <a href="{{ route('details-formations', ['id' => $formation->id, 'slug'=>Str::slug(Str::limit($formation->titre, 10))]) }}" class="readmore-btn">
+                            <a  href="/category_formation/{{ $category->id }}" class="readmore-btn">
                                 {{ \App\Helpers\TranslationHelper::TranslateText('Voir plus') }}
                             </a>
                         </div>
