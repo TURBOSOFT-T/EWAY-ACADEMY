@@ -19,8 +19,12 @@ class Contenu_Inscription extends Model
             'quantity',
             'benefice',
             'type',
+                'commercial_id'
         ];
-    
+        public function commercial(){
+        return $this->belongsTo(User::class ,'commercial_id')->withDefault();
+    }
+
         public function formations(){
             return $this->belongsTo(Formation::class ,'formation_id')->withDefault();
         }

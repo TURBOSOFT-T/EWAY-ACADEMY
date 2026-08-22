@@ -18,6 +18,7 @@ protected $table ='contenu_commandes';
         'prix',
         'quantity',
         'benefice',
+            'commercial_id'
     ];
 
     public function produits(){
@@ -30,9 +31,10 @@ protected $table ='contenu_commandes';
     public function commandes(){
         return $this->belongsTo(commandes::class ,'id_commande');
     }
-   
-    public function pack(){
-        return $this->belongsTo(packs::class ,'id_pack');
+       public function commercial(){
+        return $this->belongsTo(User::class ,'commercial_id')->withDefault();
     }
+
+
 
 }

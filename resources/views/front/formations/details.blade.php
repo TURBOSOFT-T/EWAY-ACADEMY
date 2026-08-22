@@ -12,15 +12,8 @@ $config = DB::table('configs')->first();
     <meta property="og:title" content="{{ $formation->titre }}">
     <meta property="og:description" content="{{ $formation->description ?? '' }}">
     <meta property="og:meta_description" content="{{ $formation->meta_description ?? '' }}">
-
     <meta property="og:image" content="{{ $formation->image }}">
-
-
     <meta property="og:availability" content="{{ $formation->statut }}">
-
-
-
-
     <meta name="robots" content="index, follow">
     @endsection
     <link rel="stylesheet" href="path/to/zoom.css">

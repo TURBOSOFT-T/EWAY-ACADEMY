@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_commande');
             $table->unsignedBigInteger('id_produit')->nullable();
+                $table->unsignedBigInteger('commercial_id')->nullable();
             $table->unsignedBigInteger('id_pack')->nullable();
             $table->enum("type",["produit","pack"])->default("produit");
             $table->integer("quantite")->nullable();

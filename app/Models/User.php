@@ -71,7 +71,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(commandes::class);
     }
+  public function commercial()
+    {
+        return $this->hasMany(commandes::class, 'commercial_id');
+    }
+    public function seller()
+    {
+        return $this->hasMany(commandes::class, 'seller_id');
+    }
 
+    public function contenus()
+    {
+        return $this->hasMany(contenu_commande::class, 'commercial_id');
+    }
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class, 'commercial_id');
+    }
 
     public function favoris()
     {

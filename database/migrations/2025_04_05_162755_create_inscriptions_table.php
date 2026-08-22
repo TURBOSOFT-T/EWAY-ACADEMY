@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('event_id')->nullable();
             $table->unsignedBigInteger('formation_id')->nullable();
+                $table->unsignedBigInteger('commercial_id')->nullable();
             $table->string('nom')->nullable();
             $table->string('prenom')->nullable();
             $table->string('email', 255)->nullable();

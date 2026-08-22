@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\BannersController;
 use App\Http\Controllers\CommandeController;
-
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\MyAccountController;
 
@@ -82,9 +82,9 @@ Route::resource('contacts', ContactController::class, ['only' => ['create', 'sto
 Route::get('forgot_password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forgot_password');
 Route::get('/confirmation', [HomeController::class, 'confirmation'])->name('confirmation');
 Route::get('/logout', [HomeController::class, 'logout']);
-Route::get('/verify',[HomeController::class, 'verify'])->name('2fa.index');
+Route::get('/verify', [HomeController::class, 'verify'])->name('2fa.index');
 //Route::get('/verify',[HomeController::class, 'verify'])->name('register2fa.index');
-Route::get('/registerverify',[HomeController::class, 'registerverify'])->name('register2fa.index');
+Route::get('/registerverify', [HomeController::class, 'registerverify'])->name('register2fa.index');
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -149,7 +149,7 @@ Route::get('/thank-you', [CommandeController::class, 'index'])->name('thank-you'
 // Utilisateur authentifié
 Route::middleware('auth')->group(function () {
 
-     ///Mon compte
+    ///Mon compte
     Route::get('/comptes', [MyAccountController::class, 'comptes'])->name('comptes');
     Route::put('/avatar/{id}', [MyAccountController::class, 'avatar']);
     ///Mon compte  
@@ -191,6 +191,10 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('permission:category_edit');
 
 
+    Route::post('/savecoupon', [CouponController::class, 'savecoupon'])->name('savecoupon');
+    Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply.coupon');
+
+
 
     /////////////////Les categories examens///////////////////////
     Route::get('/exam_category', [AdminController::class, 'exam_category'])->name('xam_category');
@@ -204,7 +208,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/add_new_exam', [AdminController::class, 'add_new_exam']);
     Route::post('/add_new_question', [AdminController::class, 'add_new_question'])->name('add_new_question');
     Route::get('add_questions/{id}', [AdminController::class, 'add_questions']);
-   // Route::get('/add_questions/{id}',[AdminController::class,'add_question'])->name('add_questions');
+    // Route::get('/add_questions/{id}',[AdminController::class,'add_question'])->name('add_questions');
     Route::get('registered_students', [AdminController::class, 'registered_students'])->name('registered_students');
     Route::get('/delete_students/{id}', [AdminController::class, 'delete_students'])->name('manage_students');
     // Route::get('/apply_exam/{id}',[AdminController::class,'apply_exam']);
@@ -216,9 +220,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/update_question/{id}', [AdminController::class, 'update_question']);
 
 
-   // Route::get('/exam_status/{id}', [AdminController::class, 'exam_status']);
- //   Route::post('/exam/status/{id}', [AdminController::class, 'changeStatus'])->name('exam.changeStatus');
-  //  Route::post('/exam_status/{id}', [AdminController::class, 'exam_status'])->name('exam.status');
+
     Route::post('/exam_status/{id}', [AdminController::class, 'exam_status']);
 
 
@@ -278,6 +280,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/service/{id}/update', [AdminController::class, 'service_update'])
         ->name('service.update')
         ->middleware('permission:service_edit');
+
+    ///////////////////Les coupons////////////////////////////////////////////////
+    Route::get('/admin/coupons', [AdminController::class, 'coupons'])
+        ->name('coupons');
+
+    Route::get('/admin/coupon/add', [AdminController::class, 'coupon_add'])
+        ->name('coupon.add');
+
+
+    Route::post('/savecoupon', [CouponController::class, 'savecoupon'])->name('savecoupon');
+    Route::get('/updatecoupon/{id}', [CouponController::class, 'updatecoupon'])->name('updatecoupon');
+    Route::delete('/deletecoupon/{id}', [CouponController::class, 'destroy'])->name('coupon.destroy');
+    Route::get('/putcoupon/{id}', [CouponController::class, 'putcoupon'])->name('putcoupon');
+
+    Route::resource('/coupons', CouponController::class);
 
     /////////Testimonials///////////////////
     Route::get('/admin/testimonials', [AdminController::class, 'testimonials'])
@@ -378,6 +395,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('import', [CustomerController::class, 'importExcelData']);
 
+    Route::get('/admin/support', [AdminController::class, 'support'])->name('support');
     ///////////////////les  produits////////////////////////////////////////////////
     Route::prefix('admin')->group(function () {
         Route::get('/produits', [AdminController::class, 'produits'])
@@ -406,6 +424,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/personnels', [AdminController::class, 'personnels'])
             ->name('personnels')
             ->middleware('role:admin');
+        Route::get('/corbeilles', [AdminController::class, 'corbeillepersonnel'])->name('corbeilles');
+        Route::post('/admin/personnels/{id}/update-role', [AdminController::class, 'updateRole'])
+            ->name('admin.personnels.updateRole')->middleware('role:admin');
         Route::get('/promotions', [AdminController::class, 'promotions'])
             ->name('promotions');
         Route::get('/promotions/{id}', [AdminController::class, 'promotions'])

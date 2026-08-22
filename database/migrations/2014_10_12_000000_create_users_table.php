@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('adresse')->nullable(true)->default(null);
             $table->string('phone')->nullable(true)->default(null);
             $table->string('code_postal')->nullable(true)->default(null);
-            $table->enum("role", ["personnel", "admin", "client", "commercial","etudiant", "enseignant"])->default("client");
+            $table->enum("role", ["personnel", "admin", "client", "commercial","etudiant", "enseignant"])->default("etudiant");
             $table->string('token')->nullable();
             $table->rememberToken();
             $table->softDeletes();

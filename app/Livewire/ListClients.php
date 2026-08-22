@@ -14,7 +14,8 @@ class ListClients extends Component
     public $key;
     public function render()
     {
-        $clients =User::where('role', 'client')
+      //  $clients =User::where('role', 'client')
+          $clients = User::whereNotIn('role', ['personnel','commercial', 'admin'])
       ->  Orderby("created_at");
         if (isset($this->key)) {
             $clients->where('nom', 'like', '%' . $this->key . '%')

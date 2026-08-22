@@ -1,14 +1,15 @@
 @include('sweetalert::alert')
 @php
 $config = DB::table('configs')->first();
-
 @endphp
 <!doctype html>
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <meta name="author" content="eway-academy.com">
     <title> @yield('titre') - EWAY-ACADEMY</title>
+
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="EWAY-ACADEMY : votre passerelle linguistique vers une intégration réussie au Canada. Formations en français, préparation aux tests officiels et accompagnement pour vos projets d'études ou d'immigration.">
@@ -265,14 +266,14 @@ $config = DB::table('configs')->first();
                                 </li>
                                 @else
                                 <li class="nav-item submenu"><a class="nav-link" href="#">
-                                        @if (auth()->user()->role != 'client')
+                                        @if (auth()->user()->role != 'etudiant')
                                         Dashboard
                                         @else
                                         {{ \App\Helpers\TranslationHelper::TranslateText('Mon compte') }}
                                         @endif
                                     </a>
                                     <ul>
-                                        @if (auth()->user()->role != 'client')
+                                        @if (auth()->user()->role != 'etudiant')
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ url('dashboard') }}">Dashboard</a>
                                         </li>
@@ -593,6 +594,207 @@ $config = DB::table('configs')->first();
             font-size: 24px;
         }
     </style>
+
+
+
+    <style>
+        /* Bouton d'ouverture */
+        .chat-trigger {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            /* Aligné tout en bas */
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ff9800;
+            /* Couleur orange dynamique */
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .chat-trigger:hover {
+            transform: scale(1.05);
+        }
+
+        .chat-trigger.active {
+            background-color: #e65100;
+            /* Orange plus foncé quand ouvert */
+        }
+
+        /* Fenêtre de discussion */
+        .chat-window {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+            /* Juste au-dessus du bouton */
+            width: 350px;
+            height: 450px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* En-tête */
+        .chat-header {
+            background-color: #202c33;
+            /* Teinte sombre pro */
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        .chat-title {
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .chat-subtitle {
+            font-size: 11px;
+            color: #b0bec5;
+            margin-top: 2px;
+        }
+
+        /* Zone des messages */
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-empty {
+            text-align: center;
+            color: #9e9e9e;
+            margin-top: auto;
+            margin-bottom: auto;
+            padding: 20px;
+        }
+
+        .chat-empty i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #cfd8dc;
+        }
+
+        /* Bulles de message */
+        .chat-bubble-container {
+            display: flex;
+            width: 100%;
+        }
+
+        .chat-bubble-container.client-side {
+            justify-content: flex-end;
+        }
+
+        .chat-bubble-container.admin-side {
+            justify-content: flex-start;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 13.5px;
+            line-height: 1.4;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .client-side .chat-bubble {
+            background-color: #ff9800;
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .admin-side .chat-bubble {
+            background-color: #ffffff;
+            color: #333333;
+            border-bottom-left-radius: 2px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .chat-time {
+            display: block;
+            font-size: 9px;
+            text-align: right;
+            margin-top: 4px;
+            opacity: 0.7;
+        }
+
+        /* Champ de saisie tout en bas */
+        .chat-footer {
+            display: flex;
+            border-top: 1px solid #e0e0e0;
+            padding: 10px;
+            background-color: #ffffff;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .chat-footer button {
+            background-color: #ff9800;
+            color: #ffffff;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            margin-left: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .chat-footer button:hover {
+            background-color: #e65100;
+        }
+
+        /* Responsive mobile */
+        @media (max-width: 480px) {
+            .chat-window {
+                width: calc(100% - 40px);
+                height: 70%;
+                bottom: 85px;
+            }
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('newsletter-form');

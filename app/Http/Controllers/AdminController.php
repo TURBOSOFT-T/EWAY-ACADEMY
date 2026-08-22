@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\commandes;
 use App\Models\config;
 use App\Models\historiques_connexion;
-use App\Models\{Blog, produits, Category, Certification, Comment as ModelsComment, Marque, Contact, Examen, favoris, Formation, Inscription, Oex_category, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, Service, Testimonial, User_exam};
+use App\Models\{Blog, produits, Category, Certification, Comment as ModelsComment, Marque, Contact, Coupon, Examen, favoris, Formation, Inscription, Oex_category, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, Service, Testimonial, User_exam};
 use App\Models\User;
 use App\Models\views;
 use Illuminate\Http\Request;
@@ -1048,6 +1048,31 @@ public function question_status(Request $request, $id)
 
 
 
+    ////////////////coupons //////////////////
+
+    public function coupons()
+    {
+        $coupons = Coupon::orderBy('id', 'DESC')->paginate('10');
+        return view('admin.coupons.list', compact('coupons'));
+    }
+
+    public function coupon_add()
+    {
+        $commercials = User::where('role', 'commercial')->get();
+        return view('admin.coupons.add', compact('commercials'));
+    }
+
+    public function coupons_update($id)
+    {
+        $coupon = Coupon::find($id);
+        if (!$coupon) {
+            $message = "Coupon non disponible !";
+            abort(404, $message);
+        }
+        return view('admin.coupons.update', compact('coupon'));
+    }
+
+
 
 
 
@@ -1064,6 +1089,38 @@ public function question_status(Request $request, $id)
 
     public function personnels()
     {
+        // $personnels = User::where('role', 'personnel')->get();
+            $total_supprimers = User::onlyTrashed()->count();
+        $personnels = User::whereNotIn('role', ['client','etudiant', 'admin'])->get();
+        return view('admin.personnels.list', compact('personnels', 'total_supprimers'));
+    }
+
+    
+    public function corbeillepersonnel()
+    {
+        return view("admin.personnels.corbeille");
+    }
+
+    public function updateRole(Request $request, $id)
+    {
+        // Validation
+        $request->validate([
+            'role' => 'required|string'
+        ]);
+
+        // Recherche utilisateur
+        $user = User::findOrFail($id);
+
+        // Mise à jour
+        $user->role = $request->role;
+        $user->save();
+
+        // Redirection + message
+        return redirect()->back()->with('success', 'Rôle mis à jour avec succès');
+    }
+
+    public function personnels2()
+    {
         $personnels = User::where('role', 'personnel')->get();
 
         return view('admin.personnels.list', compact('personnels'));
@@ -1077,8 +1134,16 @@ public function question_status(Request $request, $id)
 
     public function clients()
     {
-        $clients = User::where('role', 'client')->get();
+        $clients = User::whereNotIn('role', ['personnel','commercial', 'admin'])->get();
         return view('admin.clients.list', compact('clients'));
+    }
+
+
+    //////////////////Support client
+
+    public function support()
+    {
+        return view('admin.supports.list');
     }
 
 

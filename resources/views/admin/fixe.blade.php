@@ -1,5 +1,5 @@
 @php
-    $config = DB::table('configs')->select('*')->first();
+$config = DB::table('configs')->select('*')->first();
 @endphp
 <!doctype html>
 
@@ -103,7 +103,7 @@
 
         function fetchNotificationsAndUpdateComponent() {
             // Appel AJAX pour récupérer les données du contrôleur
-            fetch('{{ route('live_notifications') }}')
+               fetch('{{ route("live_notifications") }}')
                 .then(response => response.json())
                 .then(data => {
                     const total = data.total;
@@ -176,7 +176,7 @@
                             <div class="row flex">
 
                                 <div class="parent-icon icon-color-1 col-sm-1">
-                                 
+
                                     <i class="menu-icon tf-icons ti ti-smart-home"></i>
                                 </div>
                                 <div class="menu-title col-sm-8 ">Mon Dashboard</div>
@@ -192,64 +192,64 @@
 
                     <li class="menu-item">
                         @can('category_view')
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <i class="menu-icon tf-icons ti ti-category"></i>
-                                <div data-i18n="Catégories">Catégories</div>
-                            </a>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-category"></i>
+                            <div data-i18n="Catégories">Catégories</div>
+                        </a>
                         @endcan
                         <ul class="menu-sub">
                             @can('category_view')
-                                <li class="menu-item">
-                                    <a href="{{ route('categories') }}" class="menu-link">
-                                        <div data-i18n="Liste ">Liste </div>
-                                    </a>
-                                </li>
+                            <li class="menu-item">
+                                <a href="{{ route('categories') }}" class="menu-link">
+                                    <div data-i18n="Liste ">Liste </div>
+                                </a>
+                            </li>
                             @endcan
                             @can('category_add')
-                                <li class="menu-item">
-                                    <a href="{{ route('category.add') }}" class="menu-link">
-                                        <div data-i18n="Ajouter">Ajouter</div>
-                                    </a>
-                                </li>
+                            <li class="menu-item">
+                                <a href="{{ route('category.add') }}" class="menu-link">
+                                    <div data-i18n="Ajouter">Ajouter</div>
+                                </a>
+                            </li>
                             @endcan
                         </ul>
                     </li>
 
 
-                    
+<!-- 
                     <li class="menu-item">
-                        
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                               <i class="menu-icon tf-icons ti ti-edit-circle"></i>
-                                <div data-i18n="Les Quizs">Les Quizs</div>
-                            </a>
-                      
+
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-edit-circle"></i>
+                            <div data-i18n="Les Quizs">Les Quizs</div>
+                        </a>
+
                         <ul class="menu-sub">
-                           
-                        
-                                  <li class="menu-item">
-                                    <a href="{{ route('manage_exam') }}" class="menu-link">
-                                        <div data-i18n="Liste examens ">Liste examen </div>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="{{ route('registered_students') }}" class="menu-link">
-                                        <div data-i18n="Résultats">Tésultals</div>
-                                    </a>
-                                </li>
-                           
-                            
-                              
-                       
+
+
+                            <li class="menu-item">
+                                <a href="{{ route('manage_exam') }}" class="menu-link">
+                                    <div data-i18n="Liste examens ">Liste examen </div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('registered_students') }}" class="menu-link">
+                                    <div data-i18n="Résultats">Tésultals</div>
+                                </a>
+                            </li>
+
+
+
+
                         </ul>
                     </li>
 
+ -->
 
 
-
-                     <li class="menu-item">
+                    <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-briefcase"></i> 
+                            <i class="menu-icon tf-icons ti ti-briefcase"></i>
                             <div data-i18n="Services">Services</div>
                         </a>
                         <ul class="menu-sub">
@@ -265,10 +265,12 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>  
+                    </li>
 
 
 
+
+<!-- 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-book"></i>
@@ -276,74 +278,93 @@
                             <div class="badge bg-primary rounded-pill ms-auto"></div>
                         </a>
                         @can('blog_view')
-                            <ul class="menu-sub">
-                                <li class="menu-item">
-                                    <a href="{{ route('blogs') }}" class="menu-link">
-                                        <div data-i18n="Liste ">Liste </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        @endcan
-                        @can('blog_add')
-                            <ul class="menu-sub">
-                                <li class="menu-item">
-                                    <a href="{{ route('blog.add') }}" class="menu-link">
-                                        <div data-i18n=" Créer une actualité"> Créer une actualité</div>
-                                    </a>
-                                </li>
-                            </ul>
-                        @endcan
-
-                        {{--  <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('comment') }}" class="menu-link">
-                                    <div data-i18n="Commentaires ">Commentaires </div>
-                                </a>
-                            </li>
-                        </ul> --}}
-
-
-
-
-                    </li>
-
-
-
-                
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-id"></i>
-                            <div data-i18n=" Sponsors">Sponsors</div>
-                            <div class="badge bg-primary rounded-pill ms-auto"></div>
-                        </a>
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="{{ route('sponsors') }}" class="menu-link">
-                                    <div data-i18n="Liste des sponsors">Liste</div>
+                                <a href="{{ route('blogs') }}" class="menu-link">
+                                    <div data-i18n="Liste ">Liste </div>
                                 </a>
                             </li>
-
-
                         </ul>
-                    </li>
- 
-                    <li class="menu-item">
-                        <a href="{{ route('webinaires') }}" class="menu-link">
-                            <i class="menu-icon tf-icons fas fa-video"></i>
-                            <div data-i18n="Webinaires Zoom">Webinaires Zoom</div>
+                        @endcan
+                        @can('blog_add')
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('blog.add') }}" class="menu-link">
+                                    <div data-i18n=" Créer une actualité"> Créer une actualité</div>
+                                </a>
+                            </li>
+                        </ul>
+                        @endcan
+
+                         <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('comment') }}" class="menu-link">
+                        <div data-i18n="Commentaires ">Commentaires </div>
                         </a>
-                    </li>
+                    </li> -->
+            <!--     </ul>  -->
+
+
+<!-- 
+
+                </li>
 
                     <li class="menu-item">
-                        <a href="{{ route('documents') }}" class="menu-link">
-                            <i class="menu-icon tf-icons fas fa-file-alt"></i>
-                            <div data-i18n="Documents">Documents</div>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-briefcase"></i>
+                            <div data-i18n="  Les codes promo">  Les codes promo</div>
                         </a>
-                    </li>
+                        <ul class="menu-sub">
+
+                            <li class="menu-item">
+                                <a href="{{ route('coupons') }}" class="menu-link">
+                                    <div data-i18n="Liste">Liste</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a  href="{{ route('coupon.add') }}" class="menu-link">
+                                    <div data-i18n="Ajouter">Ajouter</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> -->
+             
 
 
-                    <!-- User interface -->
-                  {{--   <li class="menu-item">
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-id"></i>
+                        <div data-i18n=" Sponsors">Sponsors</div>
+                        <div class="badge bg-primary rounded-pill ms-auto"></div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('sponsors') }}" class="menu-link">
+                                <div data-i18n="Liste des sponsors">Liste</div>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </li>
+
+            <!--     <li class="menu-item">
+                    <a href="{{ route('webinaires') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fas fa-video"></i>
+                        <div data-i18n="Webinaires Zoom">Webinaires Zoom</div>
+                    </a>
+                </li> -->
+
+                <li class="menu-item">
+                    <a href="{{ route('documents') }}" class="menu-link">
+                        <i class="menu-icon tf-icons fas fa-file-alt"></i>
+                        <div data-i18n="Documents">Documents</div>
+                    </a>
+                </li>
+
+
+                <!-- User interface -->
+                {{-- <li class="menu-item">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-color-swatch"></i>
                             <div data-i18n="Certifications">Certifications</div>
@@ -352,37 +373,37 @@
                             <ul class="menu-sub">
                                 <li class="menu-item">
                                     <a href="{{ route('certifications') }}" class="menu-link">
-                                        <div data-i18n=" Liste ">Certifications</div>
-                                    </a>
-                                </li>
+                <div data-i18n=" Liste ">Certifications</div>
+                </a>
+                </li>
 
 
 
-                            </ul>
-                        @endcan
-                        @can('inscription_view')
-                            <ul class="menu-sub">
-                                <li class="menu-item">
-                                    <a href="{{ route('certifications-inscriptions-list') }}" class="menu-link">
-                                        <div data-i18n=" Inscriptions ">Inscriptions</div>
-                                    </a>
-                                </li>
-
-
-
-                            </ul>
-                        @endcan
-
-
-
+                </ul>
+                @endcan
+                @can('inscription_view')
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ route('certifications-inscriptions-list') }}" class="menu-link">
+                            <div data-i18n=" Inscriptions ">Inscriptions</div>
+                        </a>
                     </li>
- --}}
+
+
+
+                </ul>
+                @endcan
+
+
+
+                </li>
+                --}}
 
 
 
 
 
-                    {{--    <li class="menu-item">
+                {{-- <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-id"></i>
                             <div data-i18n="Gestion des images">Gestion des images</div>
@@ -391,15 +412,15 @@
                         <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="{{ route('images') }}" class="menu-link">
-                                    <div data-i18n="Liste des images">Liste des images</div>
-                                </a>
-                            </li>
+                <div data-i18n="Liste des images">Liste des images</div>
+                </a>
+                </li>
 
 
-                        </ul>
-                    </li> --}}
-                    <!-- User interface -->
-                    {{--  <li class="menu-item">
+                </ul>
+                </li> --}}
+                <!-- User interface -->
+                {{-- <li class="menu-item">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-color-swatch"></i>
                             <div data-i18n="Gestion des vidéos">Gestion vidéos</div>
@@ -407,125 +428,145 @@
                         <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="{{ route('videos') }}" class="menu-link">
-                                    <div data-i18n="Liste des vidéos">Liste de vidéos</div>
-                                </a>
-                            </li>
+                <div data-i18n="Liste des vidéos">Liste de vidéos</div>
+                </a>
+                </li>
 
 
 
-                        </ul>
-                    </li>
- --}}
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-book"></i>
-                            <div data-i18n="Nos formations">Formations</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('formations') }}" class="menu-link">
-                                    <div data-i18n="Liste des formations">Liste des formations</div>
-                                </a>
-                            </li>
+                </ul>
+                </li>
+                --}}
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-book"></i>
+                        <div data-i18n="Nos formations">Formations</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('formations') }}" class="menu-link">
+                                <div data-i18n="Liste des formations">Liste des formations</div>
+                            </a>
+                        </li>
 
-                        </ul>
+                    </ul>
 
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('list_inscriptions') }}" class="menu-link">
-                                    <div data-i18n="Liste des inscriptions">Liste des inscriptions</div>
-                                </a>
-                            </li>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('list_inscriptions') }}" class="menu-link">
+                                <div data-i18n="Liste des inscriptions">Liste des inscriptions</div>
+                            </a>
+                        </li>
 
-                        </ul>
-                    </li>
-
-
-
-
-
-
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-users"></i>
-                            <div data-i18n="Gestion du personnel">Gestion du personnel</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('personnels') }}" class="menu-link">
-                                    <div data-i18n="Liste du personnel">Liste du personnel</div>
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('clients') }}" class="menu-link">
-                                    <div data-i18n="Liste des étudiants ">Liste des étudiants</div>
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons ti ti-users"></i>
-                            <div data-i18n="Contacts">Contacts</div>
-                        </a>
-
-
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('admin_contact_form') }}" class="menu-link">
-                                    <div data-i18n="Liste  des contacts">Contacts</div>
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('testimonials') }}" class="menu-link">
-                                    <div data-i18n=" Témoignages"> Témoignages</div>
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                    </li>
+                    </ul>
+                </li>
 
 
 
 
 
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="ti ti-settings me-3 ti-md"></i>
-                            <div data-i18n="Configurations">Configurations</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="{{ route('contact-admin') }}" class="menu-link">
-                                    <div data-i18n="Informations">Informations</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="{{ route('banner.index') }}" class="menu-link">
-                                    <div data-i18n="Banières">Banières</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="Gestion du personnel">Gestion du personnel</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('personnels') }}" class="menu-link">
+                                <div data-i18n="Liste du personnel">Liste du personnel</div>
+                            </a>
+                        </li>
+
+                    </ul>
 
 
-                    <!-- Misc -->
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('clients') }}" class="menu-link">
+                                <div data-i18n="Liste des étudiants ">Liste des étudiants</div>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                </li>
+
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="Contacts">Contacts</div>
+                    </a>
+
+
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('admin_contact_form') }}" class="menu-link">
+                                <div data-i18n="Liste  des contacts">Contacts</div>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('testimonials') }}" class="menu-link">
+                                <div data-i18n=" Témoignages"> Témoignages</div>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                </li>
+
+<!-- 
+ @role('admin')
+               <li class="menu-item">
+                    <a   class="menu-link" href="{{ route('support') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <div>
+                            <i class="fas fa-headset"></i>
+                            <span>Support Client</span>
+                        </div>
+
+                        @php
+                        // On compte le nombre de sessions uniques actives
+                        $sessionsActivesCount = \App\Models\Message::select('session_id')->groupBy('session_id')->get()->count();
+                        @endphp
+
+                        @if($sessionsActivesCount > 0)
+                        <span style="background: #dc3545; color: white; font-size: 11px; font-weight: bold; padding: 2px 7px; border-radius: 10px; margin-left: 10px; min-width: 18px; text-align: center;">
+                            {{ $sessionsActivesCount }}
+                        </span>
+                        @endif
+                    </a>
+                </li>
+                @endcan
+ -->
+
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="ti ti-settings me-3 ti-md"></i>
+                        <div data-i18n="Configurations">Configurations</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('contact-admin') }}" class="menu-link">
+                                <div data-i18n="Informations">Informations</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('banner.index') }}" class="menu-link">
+                                <div data-i18n="Banières">Banières</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <!-- Misc -->
 
                 </ul>
             </aside>
@@ -558,7 +599,7 @@
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
-                            {{--     <li class="nav-item dropdown-language dropdown">
+                            {{-- <li class="nav-item dropdown-language dropdown">
                                 <a class="nav-link btn btn-text-secondary btn-icon rounded-pill dropdown-toggle hide-arrow"
                                     href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <i class="ti ti-language rounded-circle ti-md"></i>
@@ -645,7 +686,7 @@
                                     @livewire('AdminNotifications')
                                 </div>
                             </li>
-                            {{--   <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                            {{-- <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
                                 <a class="nav-link btn btn-text-secondary btn-icon rounded-pill dropdown-toggle hide-arrow"
                                     href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside"
                                     aria-expanded="false">
@@ -719,9 +760,9 @@
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        {{--  <img src="../../assets/img/avatars/1.png" alt class="rounded-circle" /> --}}
-                                        {{--    <img src="{{ asset('assets/avatars/' . Auth::user()->avatar) }}" alt
-                                            class="rounded-circle"> --}}
+                                        {{-- <img src="../../assets/img/avatars/1.png" alt class="rounded-circle" /> --}}
+                                        {{-- <img src="{{ asset('assets/avatars/' . Auth::user()->avatar) }}" alt
+                                        class="rounded-circle"> --}}
                                         <img src="{{ asset('public/avatars/' . Auth::user()->avatar) }}" alt
                                             class="rounded-circle">
                                     </div>
@@ -732,7 +773,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
                                                     <div class="avatar avatar-online">
-                                                        {{--  <img src="../../assets/img/avatars/1.png" alt
+                                                        {{-- <img src="../../assets/img/avatars/1.png" alt
                                                             class="rounded-circle" /> --}}
                                                         <img src="{{ asset('public/avatars/' . Auth::user()->avatar) }}"
                                                             alt class="rounded-circle">
@@ -755,14 +796,14 @@
                                         <span>Accueil</span>
                                     </a>
                                     <li>
-                                        <a class="dropdown-item"href="{{ route('parametres') }}">
+                                        <a class="dropdown-item" href="{{ route('parametres') }}">
                                             <i class="ti ti-settings me-3 ti-md"></i><span
                                                 class="align-middle">Settings</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('dashboard') }}">
-                                            {{--  <i class="ti ti-settings me-3 ti-md"></i> --}}
+                                            {{-- <i class="ti ti-settings me-3 ti-md"></i> --}}
                                             <i class="menu-icon tf-icons ti ti-smart-home"></i>
                                             <span>Dashboard</span>
                                         </a>
@@ -777,9 +818,9 @@
                                     <li>
                                         <div class="d-grid px-2 pt-2 pb-1">
                                             {{-- <a class="btn btn-sm btn-danger d-flex"href="{{ route('logout') }}"
-                                                target="_blank">
-                                                <small class="align-middle">Logout</small>
-                                                <i class="ti ti-logout ms-2 ti-14px"></i>
+                                            target="_blank">
+                                            <small class="align-middle">Logout</small>
+                                            <i class="ti ti-logout ms-2 ti-14px"></i>
                                             </a> --}}
                                             <a class="btn btn-sm btn-danger d-flex" href="{{ route('logout') }}"
                                                 target="_blank"
@@ -888,45 +929,44 @@
     @stack('scripts')
 
     <script>
-        @if (session('error'))
-            <
+        @if(session('error')) <
             script >
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Accès refusé',
-                    text: "{{ session('error') }}",
-                });
+            Swal.fire({
+                icon: 'error',
+                title: 'Accès refusé',
+                text: "{{ session('error') }}",
+            });
     </script>
     @endif
 
     </script>
 
     @if (auth()->user()->is_admin)
-        <script>
-            function sendMarkRequest(id = null) {
-                return $.ajax("{{ route('markNotification') }}", {
-                    method: 'POST',
-                    data: {
-                        _token,
-                        id
-                    }
-                });
-            }
-            $(function() {
-                $('.mark-as-read').click(function() {
-                    let request = sendMarkRequest($(this).data('id'));
-                    request.done(() => {
-                        $(this).parents('div.alert').remove();
-                    });
-                });
-                $('#mark-all').click(function() {
-                    let request = sendMarkRequest();
-                    request.done(() => {
-                        $('div.alert').remove();
-                    })
+    <script>
+        function sendMarkRequest(id = null) {
+            return $.ajax("{{ route('markNotification') }}", {
+                method: 'POST',
+                data: {
+                    _token,
+                    id
+                }
+            });
+        }
+        $(function() {
+            $('.mark-as-read').click(function() {
+                let request = sendMarkRequest($(this).data('id'));
+                request.done(() => {
+                    $(this).parents('div.alert').remove();
                 });
             });
-        </script>
+            $('#mark-all').click(function() {
+                let request = sendMarkRequest();
+                request.done(() => {
+                    $('div.alert').remove();
+                })
+            });
+        });
+    </script>
     @endif
 </body>
 

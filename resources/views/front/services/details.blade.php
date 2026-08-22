@@ -15,7 +15,6 @@ $config = DB::table('configs')->first();
         <meta property="og:description" content="{{ $service->description ?? '' }}">
         <meta property="og:meta_description" content="{{ $service->meta_description ?? '' }}">
         <meta property="og:image" content="{{ $service->image }}">
-
         <meta name="robots" content="index, follow">
         @endsection
 
