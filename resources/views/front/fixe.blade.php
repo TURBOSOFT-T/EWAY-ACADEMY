@@ -8,8 +8,12 @@ $config = DB::table('configs')->first();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <meta name="author" content="eway-academy.com">
-    <title> @yield('titre') - EWAY-ACADEMY</title>
+     <title> @yield('titre') - EWAY-ACADEMY</title> 
 
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="author" content="{{ config('seo.author') }}">
+<meta name="description" content="@yield('meta_description', config('seo.description'))">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="EWAY-ACADEMY : votre passerelle linguistique vers une intégration réussie au Canada. Formations en français, préparation aux tests officiels et accompagnement pour vos projets d'études ou d'immigration.">
