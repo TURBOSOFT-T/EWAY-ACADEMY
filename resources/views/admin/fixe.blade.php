@@ -103,7 +103,7 @@ $config = DB::table('configs')->select('*')->first();
 
         function fetchNotificationsAndUpdateComponent() {
             // Appel AJAX pour récupérer les données du contrôleur
-               fetch('{{ route("live_notifications") }}')
+            fetch('{{ route("live_notifications") }}')
                 .then(response => response.json())
                 .then(data => {
                     const total = data.total;
@@ -216,7 +216,7 @@ $config = DB::table('configs')->select('*')->first();
                     </li>
 
 
-<!-- 
+                    <!-- 
                     <li class="menu-item">
 
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -270,7 +270,7 @@ $config = DB::table('configs')->select('*')->first();
 
 
 
-
+                    <!-- 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-book"></i>
@@ -301,11 +301,11 @@ $config = DB::table('configs')->select('*')->first();
                                 <a href="{{ route('comment') }}" class="menu-link">
                         <div data-i18n="Commentaires ">Commentaires </div>
                         </a>
-                    </li> 
-            <!--     </ul>  -->
+                    </li> -->
+                    <!--     </ul>  -->
 
 
-<!-- 
+                    <!-- 
 
                 </li>
 
@@ -328,43 +328,76 @@ $config = DB::table('configs')->select('*')->first();
                             </li>
                         </ul>
                     </li> -->
-             
+
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-book"></i>
+                            <div data-i18n="Actualités">Actualités</div>
+                            <div class="badge bg-primary rounded-pill ms-auto"></div>
+                        </a>
+                        @can('blog_view')
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('blogs') }}" class="menu-link">
+                                    <div data-i18n="Liste ">Liste </div>
+                                </a>
+                            </li>
+                        </ul>
+                        @endcan
+                        @can('blog_add')
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('blog.add') }}" class="menu-link">
+                                    <div data-i18n=" Créer une actualité"> Créer une actualité</div>
+                                </a>
+                            </li>
+                        </ul>
+                        @endcan
+
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('comment') }}" class="menu-link">
+                                    <div data-i18n="Commentaires ">Commentaires </div>
+                                </a>
+                            </li>
+
+                            <li class="menu-item">
+                                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                    <i class="menu-icon tf-icons ti ti-id"></i>
+                                    <div data-i18n=" Sponsors">Sponsors</div>
+                                    <div class="badge bg-primary rounded-pill ms-auto"></div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item">
+                                        <a href="{{ route('sponsors') }}" class="menu-link">
+                                            <div data-i18n="Liste des sponsors">Liste</div>
+                                        </a>
+                                    </li>
 
 
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-id"></i>
-                        <div data-i18n=" Sponsors">Sponsors</div>
-                        <div class="badge bg-primary rounded-pill ms-auto"></div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="{{ route('sponsors') }}" class="menu-link">
-                                <div data-i18n="Liste des sponsors">Liste</div>
-                            </a>
-                        </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
 
-
-                    </ul>
-                </li>
-
-            <!--     <li class="menu-item">
+                            <!--     <li class="menu-item">
                     <a href="{{ route('webinaires') }}" class="menu-link">
                         <i class="menu-icon tf-icons fas fa-video"></i>
                         <div data-i18n="Webinaires Zoom">Webinaires Zoom</div>
                     </a>
                 </li> -->
 
-                <li class="menu-item">
-                    <a href="{{ route('documents') }}" class="menu-link">
-                        <i class="menu-icon tf-icons fas fa-file-alt"></i>
-                        <div data-i18n="Documents">Documents</div>
-                    </a>
-                </li>
+                            <li class="menu-item">
+                                <a href="{{ route('documents') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-file-alt"></i>
+                                    <div data-i18n="Documents">Documents</div>
+                                </a>
+                            </li>
 
 
-                <!-- User interface -->
-                {{-- <li class="menu-item">
+                            <!-- User interface -->
+                            {{-- <li class="menu-item">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-color-swatch"></i>
                             <div data-i18n="Certifications">Certifications</div>
@@ -373,9 +406,9 @@ $config = DB::table('configs')->select('*')->first();
                             <ul class="menu-sub">
                                 <li class="menu-item">
                                     <a href="{{ route('certifications') }}" class="menu-link">
-                <div data-i18n=" Liste ">Certifications</div>
-                </a>
-                </li>
+                            <div data-i18n=" Liste ">Certifications</div>
+                            </a>
+                    </li>
 
 
 
@@ -522,7 +555,7 @@ $config = DB::table('configs')->select('*')->first();
 
                 </li>
 
-<!-- 
+                <!-- 
  @role('admin')
                <li class="menu-item">
                     <a   class="menu-link" href="{{ route('support') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
