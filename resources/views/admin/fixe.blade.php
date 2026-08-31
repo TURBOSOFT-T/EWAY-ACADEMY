@@ -270,7 +270,7 @@ $config = DB::table('configs')->select('*')->first();
 
 
 
-<!-- 
+
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-book"></i>
@@ -301,7 +301,7 @@ $config = DB::table('configs')->select('*')->first();
                                 <a href="{{ route('comment') }}" class="menu-link">
                         <div data-i18n="Commentaires ">Commentaires </div>
                         </a>
-                    </li> -->
+                    </li> 
             <!--     </ul>  -->
 
 
