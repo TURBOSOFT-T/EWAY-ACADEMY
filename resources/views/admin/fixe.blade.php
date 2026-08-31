@@ -354,7 +354,7 @@ $config = DB::table('configs')->select('*')->first();
                         </ul>
                         @endcan
 
-                        <ul class="menu-sub">
+                     <!--    <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="{{ route('comment') }}" class="menu-link">
                                     <div data-i18n="Commentaires ">Commentaires </div>
@@ -362,7 +362,7 @@ $config = DB::table('configs')->select('*')->first();
                             </li>
 
 
-                        </ul>
+                        </ul> -->
                     </li>
 
                     <li class="menu-item">
