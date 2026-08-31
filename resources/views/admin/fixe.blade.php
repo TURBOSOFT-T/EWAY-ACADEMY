@@ -361,43 +361,43 @@ $config = DB::table('configs')->select('*')->first();
                                 </a>
                             </li>
 
-                            <li class="menu-item">
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class="menu-icon tf-icons ti ti-id"></i>
-                                    <div data-i18n=" Sponsors">Sponsors</div>
-                                    <div class="badge bg-primary rounded-pill ms-auto"></div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <li class="menu-item">
-                                        <a href="{{ route('sponsors') }}" class="menu-link">
-                                            <div data-i18n="Liste des sponsors">Liste</div>
-                                        </a>
-                                    </li>
 
-
-                                </ul>
-                            </li>
                         </ul>
                     </li>
-                    
 
-                            <!--     <li class="menu-item">
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-id"></i>
+                            <div data-i18n=" Sponsors">Sponsors</div>
+                            <div class="badge bg-primary rounded-pill ms-auto"></div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="{{ route('sponsors') }}" class="menu-link">
+                                    <div data-i18n="Liste des sponsors">Liste</div>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+                    <!--     <li class="menu-item">
                     <a href="{{ route('webinaires') }}" class="menu-link">
                         <i class="menu-icon tf-icons fas fa-video"></i>
                         <div data-i18n="Webinaires Zoom">Webinaires Zoom</div>
                     </a>
                 </li> -->
 
-                            <li class="menu-item">
-                                <a href="{{ route('documents') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-file-alt"></i>
-                                    <div data-i18n="Documents">Documents</div>
-                                </a>
-                            </li>
+                    <li class="menu-item">
+                        <a href="{{ route('documents') }}" class="menu-link">
+                            <i class="menu-icon tf-icons fas fa-file-alt"></i>
+                            <div data-i18n="Documents">Documents</div>
+                        </a>
+                    </li>
 
 
-                            <!-- User interface -->
-                            {{-- <li class="menu-item">
+                    <!-- User interface -->
+                    {{-- <li class="menu-item">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-color-swatch"></i>
                             <div data-i18n="Certifications">Certifications</div>
@@ -406,8 +406,8 @@ $config = DB::table('configs')->select('*')->first();
                             <ul class="menu-sub">
                                 <li class="menu-item">
                                     <a href="{{ route('certifications') }}" class="menu-link">
-                            <div data-i18n=" Liste ">Certifications</div>
-                            </a>
+                    <div data-i18n=" Liste ">Certifications</div>
+                    </a>
                     </li>
 
 
