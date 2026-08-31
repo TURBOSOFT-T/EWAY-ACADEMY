@@ -21,6 +21,7 @@
     @include('front.components.sponsor')
     @include('front.components.formations')
     @include('front.components.testimonials')
+    @include('front.components.blogs')
     @include('front.components.newsletter')
   </body>
   </html>
