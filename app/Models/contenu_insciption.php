@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contenu_Inscription extends Model
+class contenu_inscription extends Model
 {
     use HasFactory;
     protected $table ='contenu_inscriptions';
@@ -13,12 +13,7 @@ class Contenu_Inscription extends Model
             'formation_id',
             'inscription_id',
             'event_id',
-            'quantite',
-            'prix_unitaire',
-            'prix',
-            'quantity',
-            'benefice',
-            'type',
+           
                 'commercial_id'
         ];
         public function commercial(){
@@ -32,10 +27,10 @@ class Contenu_Inscription extends Model
             return $this->belongsTo(Event::class ,'event_id')->withDefault();
         }
     
-        public function inscriptions(){
+       /*  public function inscriptions(){
             return $this->belongsTo(Inscription::class ,'inscription_id');
         }
-       
+        */
       
     
 }

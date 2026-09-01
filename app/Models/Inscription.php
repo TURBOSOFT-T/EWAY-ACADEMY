@@ -83,7 +83,8 @@ class Inscription extends Model
 
     public function contenus()
     {
-        return $this->hasMany(Contenu_Inscription::class, 'inscription_id');
+        return $this->hasMany(contenu_inscription::class, 'inscription_id');
     }
+
 
 }
