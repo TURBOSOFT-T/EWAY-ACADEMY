@@ -33,6 +33,8 @@ class User extends Authenticatable
         'user_id',
         'two_factor_code',
         'two_factor_expires_at',
+        'active',
+        
     ];
 
     /**
