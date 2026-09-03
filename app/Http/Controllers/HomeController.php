@@ -197,6 +197,27 @@ class HomeController extends Controller
         return view('front.shop.index', compact('current_category','marques', 'users', 'categories', 'produits'));
     }
 
+    
+//////////////////Enseignants/////////////////////////////////////////
+    public function enseignants()
+    {
+        $enseignant = User::whereIn('role', ['enseignant'])
+                    ->where('active', true) // Ou 1 selon votre BDD
+                    ->latest()
+                    ->paginate(10);
+    
+
+        
+        return view('front.enseignants.enseignants', compact( 'enseignant'));
+    }
+
+    
+    public function details_enseignants($id){
+     $enseignant =User:: findOrFail($id);
+        
+        return view('front.enseignants.details', compact('enseignant'));
+    }
+
 //////////////////Formations/////////////////////////////////////////
     public function formations($id)
     {

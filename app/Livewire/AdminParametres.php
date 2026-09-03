@@ -11,13 +11,18 @@ class AdminParametres extends Component
 {
     public $email, $nom, $password, $password_confirmation,$old_password,$adresse,$phone;
 
-
+public $bio;
     public function mount()
     {
+        $user = Auth::user()->load('profile');
         $this->email = Auth::user()->email;
+
         $this->nom = Auth::user()->nom;
         $this->adresse = Auth::user()->adresse;
         $this->phone = Auth::user()->phone;
+       // Charge la bio depuis teacher_profiles si le profil existe, sinon depuis la colonne user
+        $this->bio = $user->profile?->bio ?? $user->bio;
+
     }
 
     public function render()
@@ -44,6 +49,7 @@ class AdminParametres extends Component
         $user->nom = $this->nom;
         $user->adresse = $this->adresse;
         $user->phone = $this->phone;
+        $user->bio = $this->bio;
 
         if ($this->email != $user->email) {
             $user->email = $this->email;
@@ -63,6 +69,13 @@ class AdminParametres extends Component
             $logout = true;
         }
         $user->save();
+
+        if (method_exists($user, 'profile')) {
+            $user->profile()->updateOrCreate(
+                ['user_id' => $user->id],
+                ['bio' => $this->bio]
+            );
+        }
         //flash message
         session()->flash('success', 'Vos modifications ont été enregistrées avec succès.');
         if ($logout) {

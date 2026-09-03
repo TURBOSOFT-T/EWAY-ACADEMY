@@ -461,7 +461,7 @@ class AdminController extends Controller
             'option_4' => 'required',
             'ans' => 'required',
             'exam_id' => 'required|exists:examens,id',
-           // 'points' => 'required|integer|min:1',
+            // 'points' => 'required|integer|min:1',
         ]);
         $exam = Examen::findOrFail($request->exam_id);
         $activeQuestions = Oex_question_master::where('exam_id', $request->exam_id)
@@ -474,8 +474,8 @@ class AdminController extends Controller
 
 
         if ($exam->total_points && $activeQuestions >= $exam->total_points) {
-        return redirect()->back()->with('error', "Vous avez atteint la limite de {$exam->total_points} points actifs pour cet examen.");
-    }
+            return redirect()->back()->with('error', "Vous avez atteint la limite de {$exam->total_points} points actifs pour cet examen.");
+        }
         //dd($request->all());
         if ($validator->fails()) {
             $arr = array('status' => 'flase', 'message' => $validator->errors()->all());
@@ -515,61 +515,61 @@ class AdminController extends Controller
 
 
     // Edit question status
-public function question_status(Request $request, $id)
-{
-    $question = Oex_question_master::findOrFail($id);
-    $exam = Examen::findOrFail($question->exam_id);
+    public function question_status(Request $request, $id)
+    {
+        $question = Oex_question_master::findOrFail($id);
+        $exam = Examen::findOrFail($question->exam_id);
 
-    // Vérification si on veut activer la question
-    if ($question->status == 0) {
-        $activeQuestions = Oex_question_master::where('exam_id', $question->exam_id)
-            ->where('status', 1)
-            ->count();
+        // Vérification si on veut activer la question
+        if ($question->status == 0) {
+            $activeQuestions = Oex_question_master::where('exam_id', $question->exam_id)
+                ->where('status', 1)
+                ->count();
 
-        if ($activeQuestions >= $exam->question_limit) {
-            return response()->json([
-                'success' => false,
-                'status' => $question->status,
-                'total_points' => Oex_question_master::where('exam_id', $question->exam_id)
-                                    ->where('status', 1)
-                                    ->sum('points'),
-                'message' => "Impossible d'activer cette question. Limite de {$exam->question_limit} questions actives atteinte."
-            ]);
-        }
-
-        // Vérification du total des points si l'examen a une limite
-        if (isset($exam->total_points)) {
-            $totalPoints = Oex_question_master::where('exam_id', $question->exam_id)
-                            ->where('status', 1)
-                            ->sum('points');
-
-            if ($totalPoints + $question->points > $exam->total_points) {
+            if ($activeQuestions >= $exam->question_limit) {
                 return response()->json([
                     'success' => false,
                     'status' => $question->status,
-                    'total_points' => $totalPoints,
-                    'message' => "Impossible d'activer cette question. Total des points maximum ({$exam->total_points}) dépassé."
+                    'total_points' => Oex_question_master::where('exam_id', $question->exam_id)
+                        ->where('status', 1)
+                        ->sum('points'),
+                    'message' => "Impossible d'activer cette question. Limite de {$exam->question_limit} questions actives atteinte."
                 ]);
             }
-        }
-    }
 
-    // Inverser le statut
-    $question->status = $question->status == 1 ? 0 : 1;
-    $question->save();
-
-    // Total des points après mise à jour
-    $totalPoints = Oex_question_master::where('exam_id', $question->exam_id)
+            // Vérification du total des points si l'examen a une limite
+            if (isset($exam->total_points)) {
+                $totalPoints = Oex_question_master::where('exam_id', $question->exam_id)
                     ->where('status', 1)
                     ->sum('points');
 
-    return response()->json([
-        'success' => true,
-        'status' => $question->status,
-        'total_points' => $totalPoints,
-        'message' => 'Statut de la question mis à jour avec succès'
-    ]);
-}
+                if ($totalPoints + $question->points > $exam->total_points) {
+                    return response()->json([
+                        'success' => false,
+                        'status' => $question->status,
+                        'total_points' => $totalPoints,
+                        'message' => "Impossible d'activer cette question. Total des points maximum ({$exam->total_points}) dépassé."
+                    ]);
+                }
+            }
+        }
+
+        // Inverser le statut
+        $question->status = $question->status == 1 ? 0 : 1;
+        $question->save();
+
+        // Total des points après mise à jour
+        $totalPoints = Oex_question_master::where('exam_id', $question->exam_id)
+            ->where('status', 1)
+            ->sum('points');
+
+        return response()->json([
+            'success' => true,
+            'status' => $question->status,
+            'total_points' => $totalPoints,
+            'message' => 'Statut de la question mis à jour avec succès'
+        ]);
+    }
 
     public function question_status2(Request $request, $id)
     {
@@ -589,8 +589,6 @@ public function question_status(Request $request, $id)
                     'message' => "Impossible d'activer cette question. Limite de {$exam->question_limit} questions actives atteinte."
                 ]);
             }
-
-             
         }
 
         // Inverser le statut
@@ -680,11 +678,11 @@ public function question_status(Request $request, $id)
         $data['exam_info'] = Examen::where('id', $std_exam->exam_id)->get()->first();
 
         $data['result_info'] = Oex_result::where('exam_id', $std_exam->exam_id)->where('user_id', $std_exam->user_id)->get()->first();
-  $total = 0;
-  $result =  Oex_result::where('exam_id', $std_exam->exam_id)->where('user_id', $std_exam->user_id)->get()->first();
+        $total = 0;
+        $result =  Oex_result::where('exam_id', $std_exam->exam_id)->where('user_id', $std_exam->user_id)->get()->first();
 
 
-         if ($result) {
+        if ($result) {
             $resultData = json_decode($result->result_json, true);
 
             foreach ($resultData as $questionId => $status) {
@@ -1090,12 +1088,13 @@ public function question_status(Request $request, $id)
     public function personnels()
     {
         // $personnels = User::where('role', 'personnel')->get();
-            $total_supprimers = User::onlyTrashed()->count();
-        $personnels = User::whereNotIn('role', ['client','etudiant', 'admin'])->get();
+        $total_supprimers = User::onlyTrashed()->count();
+        //   $personnels = User::whereNotIn('role', ['client','etudiant', 'admin'])->get();
+        $personnels = User::whereIn('role', ['enseignant', 'admin', 'personnel', 'commercial'])->get();
         return view('admin.personnels.list', compact('personnels', 'total_supprimers'));
     }
 
-    
+
     public function corbeillepersonnel()
     {
         return view("admin.personnels.corbeille");
@@ -1119,12 +1118,7 @@ public function question_status(Request $request, $id)
         return redirect()->back()->with('success', 'Rôle mis à jour avec succès');
     }
 
-    public function personnels2()
-    {
-        $personnels = User::where('role', 'personnel')->get();
 
-        return view('admin.personnels.list', compact('personnels'));
-    }
 
 
 
@@ -1134,7 +1128,7 @@ public function question_status(Request $request, $id)
 
     public function clients()
     {
-        $clients = User::whereNotIn('role', ['personnel','commercial', 'admin'])->get();
+        $clients = User::whereNotIn('role', ['personnel', 'commercial', 'admin'])->get();
         return view('admin.clients.list', compact('clients'));
     }
 

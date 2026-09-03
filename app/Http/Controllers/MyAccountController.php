@@ -28,6 +28,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\File;
 
+use Illuminate\Support\Facades\Storage;
 class MyAccountController extends Controller
 {
     use ListGouvernorats;
@@ -48,15 +49,38 @@ class MyAccountController extends Controller
         return view('front.comptes.profile');
     }
 
-
     public function avatar(Request $request)
+{
+    $request->validate([
+        'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+    ]);
+
+    $user = Auth::user();
+
+    // 1. Suppression de l'ancien avatar s'il existe
+    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        Storage::disk('public')->delete($user->avatar);
+    }
+
+    // 2. Enregistrement de la nouvelle image dans storage/app/public/avatars
+    $path = $request->file('avatar')->store('avatars', 'public');
+
+    // 3. Mise à jour en BDD
+    $user->update([
+        'avatar' => $path
+    ]);
+
+    return back()->with('success', 'Avatar mis à jour avec succès.');
+}
+
+    public function avatar2(Request $request)
     {
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $user = Auth::user();
         if ($user->avatar) {
-            $oldAvatarPath = public_path('public/avatars/') . '/' . $user->avatar;
+            $oldAvatarPath = public_path('public/personnel/') . '/' . $user->avatar;
             if (File::exists($oldAvatarPath)) {
                 File::delete($oldAvatarPath);
             }
@@ -64,7 +88,7 @@ class MyAccountController extends Controller
 
         $avatarName = time() . '.' . $request->avatar->getClientOriginalExtension();
 
-        $request->avatar->move(public_path('public/avatars/'), $avatarName);
+        $request->avatar->move(public_path('public/personnel/'), $avatarName);
 
         Auth()->user()->update(['avatar' => $avatarName]);
 

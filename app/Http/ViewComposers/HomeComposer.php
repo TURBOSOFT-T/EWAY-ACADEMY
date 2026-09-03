@@ -3,7 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use Illuminate\View\View;
-use App\Models\{Blog, Category, config, Event, Formation, Service, Sponsor, Testimonial, Video};
+use App\Models\{Blog, Category, config, Event, Formation, Service, Sponsor, Testimonial, User, Video};
 
 class HomeComposer
 {
@@ -26,7 +26,12 @@ class HomeComposer
         ->limit(100)->get(),
       'configs' => config::all(),
       'config' => config::all(),
-
+    'enseignants' => User::whereIn('role', ['enseignant','admin'])
+                    ->where('active', true) // Ou 1 selon votre BDD
+                    ->with('profile')
+                    ->latest()
+                    ->take(4)
+                    ->get(),
     ]);
   }
 }

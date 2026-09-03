@@ -95,6 +95,14 @@ Route::get('/details-produits/{id}/{slug}', [HomeController::class, 'details'])-
 Route::get('/details-services/{id}/{slug}', [HomeController::class, 'detailsServices'])->name('details-services');
 
 
+
+
+//////Enseignants/////////////
+Route::get('/enseignants', [HomeController::class, 'enseignants'])->name('enseignants');
+
+Route::get('/details-enseignants/{id}/{slug}', [HomeController::class, 'details_enseignants'])->name('details-enseignants');
+
+
 //////Formations/////////////
 Route::get('/nos-formations', [HomeController::class, 'formations'])->name('nos-formations');
 Route::get('/category_formation/{id}', [HomeController::class, 'formations'])->where('id', '[0-9]+');

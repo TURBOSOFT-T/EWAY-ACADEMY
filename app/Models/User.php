@@ -160,4 +160,21 @@ class User extends Authenticatable
             'two_factor_expires_at' => null,
         ]);
     }
+
+    // Les avis reçus par l'enseignant
+public function receivedEvaluations()
+{
+    return $this->hasMany(TeacherEvaluation::class, 'teacher_id');
+}
+
+// Les avis donnés par l'étudiant
+public function givenEvaluations()
+{
+    return $this->hasMany(TeacherEvaluation::class, 'student_id');
+}
+
+public function profile()
+    {
+        return $this->hasOne(TeacherProfile::class, 'user_id');
+    }
 }

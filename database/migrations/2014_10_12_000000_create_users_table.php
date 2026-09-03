@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom')->nullable(true)->default(null);
             $table->string('email')->unique();
+            $table->text('bio')->nullable();
+            $table->boolean('disponible')->default(true);
+            $table->boolean('active')->default(true);
             $table->string("avatar")->nullable(true)->default(null);
             $table->string('password')->nullable(true)->default(null);
             $table->string('two_factor_code')->nullable();

@@ -1,8 +1,8 @@
 <form wire:submit.prevent="update">
     <div class="modal-body">
         <div class="row g-3">
-
-        <div class="col-12">
+            <!-- Champ Avatar / Photo de profil -->
+            <div class="col-12">
                 <label class="form-label fw-bold">Photo de profil / Avatar</label>
                 <div class="d-flex align-items-center gap-3">
                     <div class="position-relative">
@@ -30,6 +30,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-6">
                 <label class="form-label">Nom</label>
                 <input type="text" wire:model="nom" class="form-control @error('nom') is-invalid @enderror">
@@ -54,9 +55,7 @@
                 @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
-         
-
-           <div class="col-md-6">
+            <div class="col-md-6">
                 <label class="form-label">Rôle</label>
                 <select wire:model="role" class="form-select @error('role') is-invalid @enderror">
                     <option value="">-- Sélectionner un rôle --</option>
@@ -73,9 +72,11 @@
 
     <div class="modal-footer mt-3">
         <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Annuler</button>
-        <button type="submit" class="btn btn-sm btn-warning">
+        <button type="submit" class="btn btn-sm btn-warning" wire:loading.attr="disabled" wire:target="avatar, update">
             <span wire:loading.remove wire:target="update">Enregistrer les modifications</span>
-            <span wire:loading wire:target="update">Mise à jour...</span>
+            <span wire:loading wire:target="update">
+                <span class="spinner-border spinner-border-sm me-1" role="status"></span> Mise à jour...
+            </span>
         </button>
     </div>
 </form>

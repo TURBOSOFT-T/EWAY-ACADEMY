@@ -55,7 +55,7 @@
                                                 <div class="mb-md-0 mb-3">
                                                     {{-- <img src="{{ Auth::user()->avatar() }}" class="rounded-circle shadow" width="130"
                                                         height="130" alt="" /> --}}
-                                                        <img src="{{ asset('public/avatars/' . Auth::user()->avatar) }}"  class="rounded-circle shadow" width="130"
+                                                        <img src="{{ Auth::user()->avatar() }}"  class="rounded-circle shadow" width="130"
                                                         height="130" alt="" /> 
                                                 </div>
                                                 <div class="ms-md-4 flex-grow-1">
@@ -104,7 +104,18 @@
                                             <a class="nav-link" data-bs-toggle="tab" href="#Edit-Profile">
                                                 <span class="p-tab-name">
                                                     <i class="ri-lock-password-line"></i>
-                                                    Edit Profile
+                                                    Modifier le profil personnel
+                                                </span>
+                                                <i class='bx bx-message-edit font-24 d-sm-none'></i>
+                                            </a>
+                                        </li>
+
+
+                                          <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#Profile">
+                                                <span class="p-tab-name">
+                                                    <i class="ri-lock-password-line"></i>
+                                                        Modifier le profil profesionnel
                                                 </span>
                                                 <i class='bx bx-message-edit font-24 d-sm-none'></i>
                                             </a>
@@ -185,6 +196,14 @@
                                             <div class="card shadow-none border mb-0 radius-15">
                                                 <div class="card-body">
                                                     @livewire('AdminParametres')
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                          <div class="tab-pane fade" id="Profile">
+                                            <div class="card shadow-none border mb-0 radius-15">
+                                                <div class="card-body">
+                                                    @livewire('EditTeacherProfile')
                                                 </div>
                                             </div>
                                         </div>

@@ -7,17 +7,23 @@ use App\Models\Shop;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
+use Livewire\WithFileUploads; // <-- 1. Importer le trait
+use Illuminate\Support\Facades\Storage;
 
 class UpdatePersonnels extends Component
 {
+
+use WithFileUploads; // <-- 2. Utiliser le trait ici
     public $personnelId;
     public $nom;
     public $prenom;
     public $email;
     public $phone;
-    public $role;
-    public $shop = 'personnel';
-
+   
+    public $role = 'personnel';
+// Champs pour l'avatar
+    public $avatar;
+    public $oldAvatar;
     /**
      * Initialisation des données de l'utilisateur à modifier
      */
@@ -30,7 +36,7 @@ class UpdatePersonnels extends Component
         $this->prenom = $personnel->prenom;
         $this->email = $personnel->email;
         $this->phone = $personnel->phone;
-        $this->shop = $personnel->role ?? 'personnel';
+        $this->role = $personnel->role ?? 'personnel';
 
         // Charge la première boutique rattachée si elle existe
 
@@ -68,6 +74,17 @@ class UpdatePersonnels extends Component
         $personnel->email  = $this->email;
         $personnel->phone  = $this->phone;
         $personnel->role   = $this->role;
+
+        if ($this->avatar) {
+            // Suppression de l'ancien avatar s'il existe dans le stockage
+            if ($personnel->avatar && Storage::disk('public')->exists($personnel->avatar)) {
+                Storage::disk('public')->delete($personnel->avatar);
+            }
+
+            // Enregistrement de la nouvelle image dans storage/app/public/avatars
+            $avatarPath = $this->avatar->store('avatars', 'public');
+            $personnel->avatar = $avatarPath; // ou $personnel->photo selon le nom de votre colonne
+        }
         $personnel->save();
         // 5. Notification et redirection
         session()->flash('success', 'Personnel mis à jour avec succès !');
