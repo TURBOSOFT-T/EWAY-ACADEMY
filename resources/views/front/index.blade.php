@@ -18,8 +18,7 @@
     @include('front.components.about')
     @include('front.components.categories')
     @include('front.components.services')
-    @include('front.components.sponsor')
-    @include('front.components.formations')
+ 
     @include('front.components.testimonials')
     @include('front.components.enseignants')
     @include('front.components.blogs')
