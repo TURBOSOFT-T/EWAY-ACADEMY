@@ -22,14 +22,22 @@
 
               @foreach ($services as $service)
               <div class="col-lg-6 col-md-6">
+
+              <!-- Header & Titre de l'image -->
+                       
                   <!-- Service Item Start -->
                   <div class="service-item wow fadeInUp" data-wow-delay="0.2s">
+                     
                       <!-- Icon Box Start -->
                       <div class="icon-box">
                           <img src="{{ Storage::url($service->image) }}" {{-- width="200" height="200" --}} alt="">
                       </div>
                       <!-- Icon Box End -->
-
+<div class="service-image-header mb-3 text-center">
+                            <h3 style="color:#003DA5; font-size: 22px; font-weight: 700;" class="mb-2">
+                                {{ \App\Helpers\TranslationHelper::TranslateText($service->nom ?? '') }}
+                            </h3>
+                        </div>
                       <!-- Service Body Start -->
                       <div class="service-body">
                           <p style="color:#003DA5;"> {{ \App\Helpers\TranslationHelper::TranslateText($service->titre ?? ' ')  }}</p>
