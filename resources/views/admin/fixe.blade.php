@@ -555,7 +555,7 @@ $config = DB::table('configs')->select('*')->first();
 
                 </li>
 
-                <!-- 
+            
  @role('admin')
                <li class="menu-item">
                     <a   class="menu-link" href="{{ route('support') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
@@ -577,7 +577,7 @@ $config = DB::table('configs')->select('*')->first();
                     </a>
                 </li>
                 @endcan
- -->
+ 
 
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">

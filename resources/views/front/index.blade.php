@@ -23,6 +23,7 @@
     @include('front.components.enseignants')
     @include('front.components.blogs')
     @include('front.components.newsletter')
+        @livewire('live-chat')
   </body>
   </html>
 </main>

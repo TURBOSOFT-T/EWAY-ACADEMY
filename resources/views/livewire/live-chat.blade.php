@@ -110,7 +110,7 @@
                     title: "{{ \App\Helpers\TranslationHelper::TranslateText('Le support vous a répondu !') }}"
                 });
 
-                setTimeout(scrollBottom, 50);
+                setTimeout(scrollBottom, 10100);
             });
 
             // Sécurité de secours : Détection par Morphing (Utile avec wire:poll)
@@ -129,7 +129,7 @@
                         title: "{{ \App\Helpers\TranslationHelper::TranslateText('Le support vous a répondu !') }}"
                     });
 
-                    setTimeout(scrollBottom, 50);
+                    setTimeout(scrollBottom, 10000);
                 }
                 
                 dernierNombreMessagesAdmin = nouveauNombreMessagesAdmin;
@@ -137,7 +137,7 @@
 
             // Écouteur standard pour vos propres envois
             Livewire.on('scroll-chat-bottom', () => {
-                setTimeout(scrollBottom, 50);
+                setTimeout(scrollBottom, 10000);
             });
         });
     </script>
