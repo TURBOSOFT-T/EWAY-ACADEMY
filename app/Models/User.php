@@ -179,4 +179,28 @@ public function profile()
     {
         return $this->hasOne(TeacherProfile::class, 'user_id');
     }
+
+    
+
+    public function hasAccessToFormation($formationId): bool
+    {
+        // 1. Acheté directement la formation
+        $hasSingleAccess = $this->inscriptions()
+            ->where('formation_id', $formationId)
+            ->where('statut', 'paye')
+            ->exists();
+
+        if ($hasSingleAccess) {
+            return true;
+        }
+
+        // 2. Acheté un pack qui contient cette formation
+        return $this->inscriptions()
+            ->whereNotNull('pack_formation_id')
+            ->where('statut', 'paye')
+            ->whereHas('packFormation.formations', function ($query) use ($formationId) {
+                $query->where('formations.id', $formationId);
+            })
+            ->exists();
+    }
 }

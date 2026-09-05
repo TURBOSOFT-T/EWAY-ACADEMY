@@ -305,10 +305,7 @@ $config = DB::table('configs')->first();
                                 @php
                                 $locales = [
                                 'fr' => ['name' => 'Français', 'flag' => 'https://img.icons8.com/color/20/france-circular.png'],
-                                'en' => ['name' => 'English', 'flag' => 'https://img.icons8.com/color/20/great-britain-circular.png'],
-                                'de' => ['name' => 'Deutsch', 'flag' => 'https://img.icons8.com/color/20/germany-circular.png'],
-                                'es' => ['name' => 'Español', 'flag' => 'https://img.icons8.com/color/20/spain-circular.png'],
-                                ];
+                                      ];
                                 $currentLocale = app()->getLocale();
                                 @endphp
 

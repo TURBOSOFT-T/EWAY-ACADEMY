@@ -61,11 +61,11 @@ $config = DB::table('configs')->first();
 
 
                         <div class="comment-one__btn-box">
-                            <a href="{{ route('formation.inscription',  $formation->id) }}"
+                            <!-- <a href="{{ route('formation.inscription',  $formation->id) }}"
                                 class="btn-default disabled">
                                 {{ \App\Helpers\TranslationHelper::TranslateText('S\'inscrire') }}
                                 <span class="icon-arrow-right"></span>
-                            </a>
+                            </a> -->
                         </div>
                         <!-- Service Entry Image End -->
                     </div>

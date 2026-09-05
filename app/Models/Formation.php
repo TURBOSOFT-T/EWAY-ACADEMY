@@ -21,6 +21,11 @@ class Formation extends Model
         'type'
     ];
 
+     public function inscrit()
+    {
+        return $this->hasMany(ContenuInscription::class, 'formation_id');
+    }
+
     public function exams()
 {
     return $this->hasMany(Examen::class, 'formation_id','id');

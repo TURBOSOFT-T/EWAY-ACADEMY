@@ -73,27 +73,6 @@ class MyAccountController extends Controller
     return back()->with('success', 'Avatar mis à jour avec succès.');
 }
 
-    public function avatar2(Request $request)
-    {
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        $user = Auth::user();
-        if ($user->avatar) {
-            $oldAvatarPath = public_path('public/personnel/') . '/' . $user->avatar;
-            if (File::exists($oldAvatarPath)) {
-                File::delete($oldAvatarPath);
-            }
-        }
-
-        $avatarName = time() . '.' . $request->avatar->getClientOriginalExtension();
-
-        $request->avatar->move(public_path('public/personnel/'), $avatarName);
-
-        Auth()->user()->update(['avatar' => $avatarName]);
-
-        return back()->with('success', 'Avatar updated successfully.');
-    }
     public function account()
     {
         $user = auth()->user();

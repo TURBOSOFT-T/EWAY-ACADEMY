@@ -3,142 +3,127 @@
 namespace App\Livewire\Formations;
 
 use Livewire\Component;
-
-
-use App\Http\Traits\ListGouvernorats as TraitsListGouvernorats;
-
-use App\Models\produits;
-
 use Livewire\WithPagination;
-use App\Mail\{OrderChangeStatut, ChangeStatut};
+use App\Http\Traits\ListGouvernorats as TraitsListGouvernorats;
 use App\Models\Inscription as ModelsInscription;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Mail;
+use App\Models\produits;
 
 class Inscription extends Component
 {
-
     use WithPagination;
     use TraitsListGouvernorats;
 
+    protected $paginationTheme = 'bootstrap';
+
     public $selectedCommandes = [];
-    public $date, $statut, $key, $gouvernoratsTunisie, $gouvernorat, $statut2;
+    public $date, $statut, $key, $type, $gouvernoratsTunisie, $gouvernorat, $statut2;
 
-
-    public function updatedKey($value)
+    public function updatedKey()
     {
-        $this->key = $value;
         $this->resetPage();
     }
+
+    public function updatedType()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-
-          
         $inscriptionsQuery = ModelsInscription::query();
+
+        // Filtre par date
         if (strlen($this->date) > 0) {
             $inscriptionsQuery->whereDate('created_at', $this->date);
         }
-     
+
+        // Filtre par statut
         if (strlen($this->statut) > 0) {
             $inscriptionsQuery->where('statut', $this->statut);
         }
+
+        // Filtre par état (confirmé / annulé)
         if (strlen($this->statut2) > 0) {
-            if ($this->statut2 == "confirmer") {
+            if ($this->statut2 === "confirmer") {
                 $inscriptionsQuery->where('etat', "confirmé");
             } else {
                 $inscriptionsQuery->where('etat', "annulé");
             }
         }
-        if (strlen($this->key) > 0) {
-            $inscriptionsQuery->where('nom', 'like', '%' . $this->key . '%')
-                ->orWhere('adresse', 'like', '%' . $this->key . '%')
-                ->orWhere('telephone', 'like', '%' . $this->key . '%')
-             
-                ->orWhere('prenom', 'like', '%' . $this->key . '%');
-        }
-         $inscriptions = $inscriptionsQuery->with(['country', 'state', 'city', 'formation'])
-                    ->where('type', 'Formation')
-        ->Orderby('id', "Desc")->paginate(80); 
 
-        $total = ModelsInscription::where('type', 'Formation')->count();
+        // Filtre par type (Formation, Pack ou tous)
+        if (strlen($this->type) > 0) {
+            $inscriptionsQuery->where('type', $this->type);
+        }
+
+        // Recherche textuelle
+        if (strlen($this->key) > 0) {
+            $key = '%' . $this->key . '%';
+            $inscriptionsQuery->where(function($query) use ($key) {
+                $query->where('nom', 'like', $key)
+                      ->orWhere('prenom', 'like', $key)
+                      ->orWhere('email', 'like', $key)
+                      ->orWhere('adresse', 'like', $key)
+                      ->orWhere('telephone', 'like', $key);
+            });
+        }
+
+        // Eager loading de 'pack' et 'formation' pour éviter les requêtes N+1
+        $inscriptions = $inscriptionsQuery
+            ->with(['country', 'state', 'city', 'formation', 'pack'])
+            ->orderBy('id', 'Desc')
+            ->paginate(80);
+
+        $total = ModelsInscription::count();
         $this->gouvernoratsTunisie = $this->getListGouvernorat();
-        return view('livewire.formations.inscription' , compact('inscriptions', 'total'));
+
+        return view('livewire.formations.inscription', compact('inscriptions', 'total'));
     }
 
-
-
-    
-
-    
     public function updateStatus($inscriptionId, $newStatus)
     {
-        // Mettre à jour le statut de la inc$inscriptiondans la base de données
-        $inscription= ModelsInscription::findOrFail($inscriptionId);
+        $inscription = ModelsInscription::find($inscriptionId);
         if ($inscription) {
             $inscription->statut = $newStatus;
 
-            //retourner le stock si l'etat de dla command epasser a retourner
-            if ($newStatus == "retournée") {
-                foreach ($inscription->contenus as $contenus) {
-                    $article = produits::find($contenus->id_produit);
-                    if ($article) {
-                        $article->retourner_stock($contenus->quantite);
-                    }
-                }
-                $this->sendOrderConfirmationMail($inscription);
-            }
-            if ($newStatus == "traitement") {
-                foreach ($inscription->contenus as $contenus) {
-                    $article = produits::find($contenus->id_produit);
-                    if ($article) {
-                        $article->retourner_stock($contenus->quantite);
-                    }
-                }
-                $this->sendOrderConfirmationMail($inscription);
-            }
-            if ($newStatus == "planification") {
-                foreach ($inscription->contenus as $contenus) {
-                    $article = produits::find($contenus->id_produit);
-                    if ($article) {
-                        $article->retourner_stock($contenus->quantite);
+            if (in_array($newStatus, ['retournée', 'traitement', 'planification'])) {
+                if ($inscription->contenus) {
+                    foreach ($inscription->contenus as $contenus) {
+                        $article = produits::find($contenus->id_produit);
+                        if ($article) {
+                            $article->retourner_stock($contenus->quantite);
+                        }
                     }
                 }
                 $this->sendOrderConfirmationMail($inscription);
             }
 
-            //enregistrer le chagement de l'etat de la inscription
             $inscription->save();
         }
     }
 
-
-    public function sendOrderConfirmationMail($inscription){
-      //  Mail::to ($inscription->email)->send(new OrderChangeStatut($inscription));
-      }
+    public function sendOrderConfirmationMail($inscription)
+    {
+        // Mail::to($inscription->email)->send(new OrderChangeStatut($inscription));
+    }
 
     public function delete($id)
     {
-        $inscription= ModelsInscription::find($id);
+        $inscription = ModelsInscription::find($id);
         if ($inscription) {
             $inscription->delete();
-
-            //flash message
             session()->flash('success', 'Inscription supprimée avec succès');
         }
-        return view('livewire.formations.inscription');
     }
 
     public function filtrer()
     {
-        //reset page
         $this->resetPage();
     }
 
-
     public function confirmer($id)
     {
-        $inscription= ModelsInscription::find($id);
+        $inscription = ModelsInscription::find($id);
         if ($inscription) {
             $inscription->etat = "confirmé";
             $inscription->save();
@@ -148,18 +133,12 @@ class Inscription extends Component
 
     public function annuler($id)
     {
-        $inscription= ModelsInscription::find($id);
+        $inscription = ModelsInscription::find($id);
         if ($inscription) {
-           
-          
             $inscription->etat = "annulé";
-
             $inscription->save();
-          //  $this->sendOrderConfirmationMail($inscription);
-            
         }
     }
-
 
     public function toggleCommandeSelection($inscriptionId)
     {
@@ -170,15 +149,12 @@ class Inscription extends Component
         }
     }
 
-
     public function getSelectedInscriptions()
     {
-        //check if $this->selectedCommandes is not empty
         if (count($this->selectedCommandes) > 0) {
-            $ids = json_encode($this->selectedCommandes);
+            $ids = json_encode(array_values($this->selectedCommandes));
             return redirect()->route('print_bordereau', ["ids" => $ids]);
-        } else {
-            return false;
         }
+        return false;
     }
 }

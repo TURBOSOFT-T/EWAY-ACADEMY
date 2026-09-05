@@ -15,17 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('titre');
             $table->unsignedBigInteger("category_id")->nullable();
-              $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->text('description')->nullable();
             $table->text('meta_description')->nullable();
             $table->string('image')->nullable()->default(null);
             $table->date('date_debut')->nullable();
             $table->date('date_fin')->nullable();
             $table->enum('type', ['formation', 'traduction', 'etudes'])
-      ->default('formation');
+                ->default('formation');
 
-           
-               $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

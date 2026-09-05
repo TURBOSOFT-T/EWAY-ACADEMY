@@ -354,7 +354,7 @@ $config = DB::table('configs')->select('*')->first();
                         </ul>
                         @endcan
 
-                     <!--    <ul class="menu-sub">
+                        <!--    <ul class="menu-sub">
                             <li class="menu-item">
                                 <a href="{{ route('comment') }}" class="menu-link">
                                     <div data-i18n="Commentaires ">Commentaires </div>
@@ -494,6 +494,32 @@ $config = DB::table('configs')->select('*')->first();
                     </ul>
                 </li>
 
+                
+                    <li class="menu-item">
+                        @can('category_view')
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ti ti-category"></i>
+                            <div data-i18n="Packs">Packs</div>
+                        </a>
+                        @endcan
+                        <ul class="menu-sub">
+                            @can('category_view')
+                            <li class="menu-item">
+                                <a href="{{ route('packs') }}" class="menu-link">
+                                    <div data-i18n="Liste ">Liste </div>
+                                </a>
+                            </li>
+                            @endcan
+                            @can('category_add')
+                            <li class="menu-item">
+                                <a href="{{ route('pack.add') }}" class="menu-link">
+                                    <div data-i18n="Ajouter">Ajouter</div>
+                                </a>
+                            </li>
+                            @endcan
+                        </ul>
+                    </li>
+
 
 
 
@@ -555,10 +581,10 @@ $config = DB::table('configs')->select('*')->first();
 
                 </li>
 
-            
- @role('admin')
-               <li class="menu-item">
-                    <a   class="menu-link" href="{{ route('support') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+
+                @role('admin')
+                <li class="menu-item">
+                    <a class="menu-link" href="{{ route('support') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                         <div>
                             <i class="fas fa-headset"></i>
                             <span>Support Client</span>
@@ -577,7 +603,7 @@ $config = DB::table('configs')->select('*')->first();
                     </a>
                 </li>
                 @endcan
- 
+
 
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">

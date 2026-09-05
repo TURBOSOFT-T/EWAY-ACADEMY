@@ -44,7 +44,7 @@ use App\Http\Controllers\CommentController;
 
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
-
+use App\Livewire\Admin\CreatePackFormation;
 Route::post('/locale', [LocaleController::class, 'change'])->name("locale.change");
 
 
@@ -108,6 +108,8 @@ Route::get('/nos-formations', [HomeController::class, 'formations'])->name('nos-
 Route::get('/category_formation/{id}', [HomeController::class, 'formations'])->where('id', '[0-9]+');
 Route::get('/details-formations/{id}/{slug}', [HomeController::class, 'details_formations'])->name('details-formations');
 Route::get('searchformation', [HomeController::class, 'searchformation'])->name("searchformation");
+
+
 
 
 Route::get('/formation/inscription/{id}', [InscriptionController::class, 'formation_inscription'])->name('formation.inscription');
@@ -180,6 +182,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::post('/videos/{video}/increment-views', [VideoController::class, 'incrementViews']);
+
+
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'dashboard'])
@@ -197,6 +201,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/category/{id}/update', [AdminController::class, 'categories_update'])
         ->name('categories.update')
         ->middleware('permission:category_edit');
+
+
+
+       // Route::get('/packs/create', CreatePackFormation::class)->name('packs.create');
+       Route::get('/admin/packs', [AdminController::class, 'packs'])
+        ->name('packs');
+       
+    Route::get('/admin/pack/add', [AdminController::class, 'pack_add'])
+        ->name('pack.add');
+    Route::get('/admin/pack/{id}/update', [AdminController::class, 'packs_update'])
+        ->name('packs.update');
+        Route::get('/packs/{pack}/edit', [AdminController::class, 'packs_update'])
+            ->name('packs.edit');
 
 
     Route::post('/savecoupon', [CouponController::class, 'savecoupon'])->name('savecoupon');

@@ -13,8 +13,8 @@ class contenu_inscription extends Model
             'formation_id',
             'inscription_id',
             'event_id',
-           
-                'commercial_id'
+            'pack_formation_id',
+            'commercial_id'
         ];
         public function commercial(){
         return $this->belongsTo(User::class ,'commercial_id')->withDefault();

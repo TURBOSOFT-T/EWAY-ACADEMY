@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\commandes;
 use App\Models\config;
 use App\Models\historiques_connexion;
-use App\Models\{Blog, produits, Category, Certification, Comment as ModelsComment, Marque, Contact, Coupon, Examen, favoris, Formation, Inscription, Oex_category, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, Service, Testimonial, User_exam};
+use App\Models\{Blog, produits, Category, Certification, Comment as ModelsComment, Marque, Contact, Coupon, Examen, favoris, Formation, Inscription, Oex_category, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, PackFormation, Service, Testimonial, User_exam};
 use App\Models\User;
 use App\Models\views;
 use Illuminate\Http\Request;
@@ -753,6 +753,26 @@ class AdminController extends Controller
         }
         return view('admin.categories.update', compact('category'));
     }
+  //////////Packs/////////////
+    public function pack_add()
+    {
+        return view('admin.packs.add');
+    }
+
+    public function packs()
+    {
+        return view('admin.packs.list');
+    }
+
+    public function packs_update($id)
+    {
+        $pack = PackFormation::find($id);
+        if (!$pack) {
+            $message = "Pack non disponible !";
+            abort(404, $message);
+        }
+        return view('admin.packs.update', compact('pack'));
+    }
 
     //////////////Les meetings//////////////
     public function webinaire_add()
@@ -939,14 +959,16 @@ class AdminController extends Controller
 
         return view('admin.formations.list', compact('formations'));
     }
-    public function inscriptions()
-    {
+ public function inscriptions()
+{
+    // 🔍 Récupération des inscriptions (Formations et Packs) avec leurs relations
+    $inscriptions = Inscription::with(['country', 'state', 'city', 'formation', 'pack', 'user'])
+        ->whereIn('type', ['Formation', 'Pack'])
+        ->latest('id')
+        ->paginate(15);
 
-        $inscriptions = Inscription::with(['country', 'state', 'city', 'formation'])
-            ->where('type', 'Formation')
-            ->get();
-        return view('admin.formations.list-inscriptions', compact('inscriptions'));
-    }
+    return view('admin.formations.list-inscriptions', compact('inscriptions'));
+}
 
 
     //////////////////////events//////////////

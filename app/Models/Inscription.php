@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Inscription extends Model
 {
@@ -50,6 +51,11 @@ class Inscription extends Model
     'motivation_etudes_canada',
     ];
 
+    public function contenus(): HasMany
+    {
+        return $this->hasMany(ContenuInscription::class, 'inscription_id');
+    }
+
         public function country(){
         return $this->belongsTo(Country::class,'country_id');
     }
@@ -81,10 +87,10 @@ class Inscription extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function contenus()
+   
+public function pack()
     {
-        return $this->hasMany(contenu_inscription::class, 'inscription_id');
+        return $this->belongsTo(PackFormation::class, 'pack_formation_id', 'id');
     }
-
 
 }

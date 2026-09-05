@@ -245,92 +245,22 @@
 
                     <br>
                 </div>
-                <div class="tab-pane fade" id="nav-orders" role="tabpanel">
-                    <div class="axil-dashboard-order">
-                        <div class="table-responsive">
-                            <table class="table text-white font-bold">
-                                <thead>
-                                    <tr>
+             <div class="tab-pane fade" id="nav-orders" role="tabpanel">
+    <div class="axil-dashboard-order">
+        <div class="table-responsive">
+           @livewire('user-dashboard', ['inscriptions' => $inscriptions])
 
-                                        <th scope="col">
-                                            {{ \App\Helpers\TranslationHelper::TranslateText('Libellé') }}
-                                        </th>
-
-
-
-                                        <th scope="col">
-                                            {{ \App\Helpers\TranslationHelper::TranslateText('Date') }}
-                                        </th>
-
-
-                                        <th scope="col">
-                                            {{ \App\Helpers\TranslationHelper::TranslateText('Status') }}
-                                        </th>
-                                        {{-- <th scope="col">
-
-                                                        {{ \App\Helpers\TranslationHelper::TranslateText('Action') }}
-                                        </th> --}}
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($inscriptions as $key => $inscription)
-                                    <tr>
-                                        <td data-label="Image">
-                                            {{ $inscription->formation->titre ?? 'Événement non défini' }}
-                                        </td>
-
-
-                                        <td data-label="price">
-                                            <p><strong></strong>
-                                                {{ $inscription->formation->created_at ?? 'Non précisé' }}
-                                            </p>
-                                        </td>
-                                        <td data-label="Status" class="text-green">
-
-                                            {{ \App\Helpers\TranslationHelper::TranslateText($inscription->statut) }}
-                                        </td>
-                                        {{-- <td>
-
-
-                                                        <a  class="axil-btn btn-bg-primary2">
-
-
-                                                            {{ \App\Helpers\TranslationHelper::TranslateText('Facture') }}</a>
-                                        </td> --}}
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="6 ">
-
-                                            <div class="text-center p-5"><img width="50" height="50" src="https://img.icons8.com/?size=100&id=15867&format=png&color=000000" alt="shopping-cart--v1" />
-                                                <br>
-                                                <h5>
-
-                                                    {{ \App\Helpers\TranslationHelper::TranslateText('Pas de inscriptions enregistrées pour le moment') }}.
-                                                </h5>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforelse
-
-
-
-                                </tbody>
-                            </table>
-
-                            <div class="table-pagination">
-
-                                <nav class="shop-pagination">
-                                    <ul class="pagination-list">
-                                        {{ $inscriptions->links('pagination::bootstrap-4') }}
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Pagination -->
+            <div class="table-pagination mt-4">
+                <nav class="shop-pagination">
+                    <ul class="pagination-list d-flex justify-content-center">
+                        {{ $inscriptions->links('pagination::bootstrap-4') }}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
                 <div class="tab-pane fade" id="nav-comments" role="tabpanel">
                     <div class="axil-dashboard-order">
                         <p> {{ \App\Helpers\TranslationHelper::TranslateText('Mes Commentaires') }}</p>

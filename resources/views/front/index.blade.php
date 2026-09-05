@@ -16,11 +16,14 @@
   <body>
     @include('front.components.banners')
     @include('front.components.about')
+    @include('front.components.packHome')
+      @include('front.components.enseignants')
+  
     @include('front.components.categories')
-    @include('front.components.services')
+
  
     @include('front.components.testimonials')
-    @include('front.components.enseignants')
+  
     @include('front.components.blogs')
     @include('front.components.newsletter')
         @livewire('live-chat')
