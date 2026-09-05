@@ -32,7 +32,7 @@ class HomeComposer
         ->latest()
         ->take(4)
         ->get(),
-     'enseignants' => User::where('role', 'enseignant')
+    'enseignants' => User::where('role', 'enseignant')
     ->where('active', true)
     ->with(['profile', 'badge'])
     ->withAvg(['evaluations as note_moyenne' => function ($query) {
@@ -42,10 +42,7 @@ class HomeComposer
         'evaluations as nombre_avis' => function ($query) {
             $query->where('is_approved', true);
         },
-        // Remplacez 'inscriptions' par le nom exact de votre table dans la BDD :
-        'formations as inscrits_count' => function ($query) {
-            $query->join('inscriptions', 'formations.id', '=', 'inscriptions.formation_id');
-        }
+        'inscriptions as inscrits_count'
     ])
     ->latest()
     ->paginate(12),

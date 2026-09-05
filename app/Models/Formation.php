@@ -79,7 +79,7 @@ public function evaluationForUser($userId)
         User::class, // ou le Modèle Enseignant
         'id', // Clef étrangère sur la table intermédiaire
         'teacher_id', // Clef étrangère sur la table teacher_evaluations
-        'responsable_id', // Clef locale sur formations
+        'user_id', // Clef locale sur formations
         'id' // Clef locale sur la table intermédiaire
     )->where('student_id', $userId);
 }
