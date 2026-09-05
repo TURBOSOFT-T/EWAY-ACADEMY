@@ -36,4 +36,11 @@ class TeacherProfile extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // app/Models/TeacherProfile.php
+
+public function badge()
+{
+    return $this->belongsTo(Badge::class, 'badge_id');
+}
 }

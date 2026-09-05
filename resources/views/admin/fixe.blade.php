@@ -578,6 +578,16 @@ $config = DB::table('configs')->select('*')->first();
 
                     </ul>
 
+                    
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('admin.evaluations.index') }}" class="menu-link">
+                                <div data-i18n=" Evaluations"> Evaluations</div>
+                            </a>
+                        </li>
+
+                    </ul>
+
 
                 </li>
 

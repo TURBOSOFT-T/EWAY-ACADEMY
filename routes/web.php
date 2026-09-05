@@ -41,7 +41,7 @@ use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\Admin\TeacherEvaluationAdminController;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 use App\Livewire\Admin\CreatePackFormation;
@@ -168,8 +168,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [MyAccountController::class, 'profile'])->name('profile');
     Route::delete('/deletecomments/{id}', [MyAccountController::class, 'delecomment'])->name('comments.delete');
 
-
-
+//Route::post('/formations/evaluate', [MyAccountController::class, 'evaluateTeacher'])->name('formations.evaluate');
+Route::post('/formations/{id}/evaluate', [MyAccountController::class, 'evaluateTeacher'])->name('formations.evaluate');
     Route::get('/exam', [MyAccountController::class, 'exam']);
     Route::get('/join_exam/{id}', [MyAccountController::class, 'join_exam']);
     Route::post('/submit_questions', [MyAccountController::class, 'submit_questions']);
@@ -329,6 +329,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('temoignages/{id}/disapprove', [TestimonialController::class, 'disapprove'])->name('temoignages.disapprove');
     Route::get('temoignages/{id}/approve', [TestimonialController::class, 'approve'])->name('temoignages.approve');
 
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/evaluations', [TeacherEvaluationAdminController::class, 'index'])->name('admin.evaluations.index');
+    Route::patch('/evaluations/{id}/approve', [TeacherEvaluationAdminController::class, 'approve'])->name('admin.evaluations.approve');
+    Route::patch('/evaluations/{id}/reject', [TeacherEvaluationAdminController::class, 'reject'])->name('admin.evaluations.reject');
+    Route::delete('/evaluations/{id}', [TeacherEvaluationAdminController::class, 'destroy'])->name('admin.evaluations.destroy');
+});
     ////////////////////////Comments////////////////////////////////////////
     Route::get('/admin/comment', [AdminController::class, 'comment'])
         ->name('comment');

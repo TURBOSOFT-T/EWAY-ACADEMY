@@ -26,13 +26,29 @@ class HomeComposer
         ->limit(100)->get(),
       'configs' => config::all(),
       'config' => config::all(),
-      'enseignants' => User::whereIn('role', ['enseignant'])
+      'enseignants1' => User::whereIn('role', ['enseignant'])
         ->where('active', true) // Ou 1 selon votre BDD
         ->with('profile')
         ->latest()
         ->take(4)
         ->get(),
-
+     'enseignants' => User::where('role', 'enseignant')
+    ->where('active', true)
+    ->with(['profile', 'badge'])
+    ->withAvg(['evaluations as note_moyenne' => function ($query) {
+        $query->where('is_approved', true);
+    }], 'rating')
+    ->withCount([
+        'evaluations as nombre_avis' => function ($query) {
+            $query->where('is_approved', true);
+        },
+        // Remplacez 'inscriptions' par le nom exact de votre table dans la BDD :
+        'formations as inscrits_count' => function ($query) {
+            $query->join('inscriptions', 'formations.id', '=', 'inscriptions.formation_id');
+        }
+    ])
+    ->latest()
+    ->paginate(12),
 
 
       'packs' => PackFormation::where('active', true)

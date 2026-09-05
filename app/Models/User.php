@@ -181,7 +181,10 @@ public function profile()
     }
 
     
-
+public function teacherEvaluations()
+    {
+        return $this->hasMany(TeacherEvaluation::class, 'teacher_id');
+    }
     public function hasAccessToFormation($formationId): bool
     {
         // 1. Acheté directement la formation
@@ -203,4 +206,56 @@ public function profile()
             })
             ->exists();
     }
+
+
+
+    // Évaluations reçues par l'enseignant
+public function evaluations()
+{
+    return $this->hasMany(TeacherEvaluation::class, 'teacher_id');
+}
+// app/Models/User.php
+
+/**
+ * Le badge associé à l'utilisateur.
+ */
+public function badge()
+{
+    return $this->belongsTo(Badge::class, 'badge_id');
+}
+
+/**
+ * Calcule la note moyenne des avis approuvés.
+ */
+public function getNoteMoyenneAttribute()
+{
+    return $this->evaluations()
+        ->where('is_approved', true)
+        ->avg('rating') ?? 0;
+}
+
+/**
+ * Nombre total d'avis approuvés.
+ */
+public function getNombreAvisAttribute()
+{
+    return $this->evaluations()
+        ->where('is_approved', true)
+        ->count();
+}
+
+
+
+// Relation directe vers tous ses inscrits à travers ses formations
+public function inscrits()
+{
+    return $this->hasManyThrough(
+        Inscription::class,   // Modèle de la table 'inscriptions'
+        Formation::class,     // Modèle intermédiaire 'formations'
+        'responsable_id',     // Clé étrangère sur la table formations
+        'formation_id',       // Clé étrangère sur la table inscriptions
+        'id',                 // Clé locale sur la table users
+        'id'                  // Clé locale sur la table formations
+    );
+}
 }

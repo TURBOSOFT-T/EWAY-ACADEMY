@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\commandes;
 use App\Models\config;
 use App\Models\historiques_connexion;
-use App\Models\{produits, Category, Comment, Document, Examen, favoris as ModelsFavoris, Inscription, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, User_exam};
+use App\Models\{produits,ContenuInscription,Formation, Category, Comment, Document, Examen, favoris as ModelsFavoris, Inscription, Oex_exam_master, Oex_question_master, Oex_result, Online_classe, TeacherEvaluation, User_exam};
 use App\Models\User;
 use App\Models\views;
 use Illuminate\Http\Request;
@@ -73,21 +73,51 @@ class MyAccountController extends Controller
     return back()->with('success', 'Avatar mis à jour avec succès.');
 }
 
-    public function account()
+public function account()
     {
         $user = auth()->user();
 
-        // 🔍 Inscriptions avec relation formation, event, certification
+        // 1. Récupérer les inscriptions principales
         $inscriptions = $user->inscriptions()
-            ->with(['event', 'formation', 'certification'])
+            ->with(['event', 'formation.responsable', 'certification'])
             ->paginate(10);
 
-        // 🔍 Extraire tous les IDs liés
-        $eventIds = $inscriptions->pluck('event_id')->filter()->unique();
-        $formationIds = $inscriptions->pluck('formation_id')->filter()->unique();
-        $certificationIds = $inscriptions->pluck('certification_id')->filter()->unique();
+       // 2. Inscriptions et contenu_inscriptions
+$inscriptionIds = $user->inscriptions()->pluck('id');
 
-        // 📅 Récupérer tous les cours en ligne liés à une de ces inscriptions
+        // 2. Récupérer le contenu des inscriptions via la table contenu_inscriptions
+    // On récupère uniquement via les inscriptions liées à l'utilisateur
+$contenuInscriptions = ContenuInscription::whereIn('inscription_id', $inscriptionIds)->get();
+        // Extraire les IDs
+        $eventIds = $contenuInscriptions->pluck('event_id')->filter()->unique();
+        $formationIds = $contenuInscriptions->pluck('formation_id')->filter()->unique();
+        $certificationIds = $contenuInscriptions->pluck('certification_id')->filter()->unique();
+
+        // 3. Charger les formations liées via contenu_inscriptions avec responsable et évaluations
+       
+
+            // 3. Charger les formations avec leur responsable et l'évaluation liée à l'étudiant connecté
+$userStudentId = $user->id;
+
+$formations = Formation::whereIn('id', $formationIds)
+    ->with([
+        'responsable',
+        'responsable.teacherEvaluations' => function ($query) use ($userStudentId) {
+            $query->where('student_id', $userStudentId)->with('badges');
+        }
+    ])
+    ->get()
+    ->map(function ($formation) {
+        $teacher = $formation->responsable;
+
+        $formation->evaluation = $teacher 
+            ? $teacher->teacherEvaluations->first() 
+            : null;
+
+        return $formation;
+    });
+
+        // 4. Récupérer les cours en ligne et documents
         $onlineClasses = Online_classe::with(['events', 'formations', 'certifications'])
             ->where(function ($query) use ($eventIds, $formationIds, $certificationIds) {
                 $query->whereIn('event_id', $eventIds)
@@ -95,7 +125,6 @@ class MyAccountController extends Controller
                     ->orWhereIn('certification_id', $certificationIds);
             })
             ->paginate(10);
-
 
         $documents = Document::with(['events', 'formations', 'certifications'])
             ->where(function ($query) use ($eventIds, $formationIds, $certificationIds) {
@@ -106,8 +135,9 @@ class MyAccountController extends Controller
             ->paginate(10);
 
         $totalZoomMeetings = $onlineClasses->total();
-        $totalDocuments  = $documents->total();
+        $totalDocuments   = $documents->total();
 
+        // Statistiques & données annexes
         $totalInscription = $user->inscriptions()
             ->whereIn('statut', ['livrée', 'payée'])
             ->count();
@@ -127,27 +157,26 @@ class MyAccountController extends Controller
             ->whereIn('statut', ['attente', 'traitement', 'En cours livraison', 'planification'])
             ->count();
 
-
         $data['portal_exams'] = Examen::select(['examens.*', 'formations.titre as cat_name'])
             ->join('formations', 'examens.formation_id', '=', 'formations.id')
-            ->orderBy('id', 'desc')->where('examens.status', '1')
+            ->orderBy('id', 'desc')
+            ->where('examens.status', '1')
+            ->get()
+            ->toArray();
 
-            ->get()->toArray();
-
-
-        $student_info
-            = User_exam::select(['user_exams.*', 'users.nom', 'examens.title', 'examens.exam_date'])
+        $student_info = User_exam::select(['user_exams.*', 'users.nom', 'examens.title', 'examens.exam_date'])
             ->join('users', 'users.id', '=', 'user_exams.user_id')
-            ->join('examens', 'user_exams.exam_id', '=', 'examens.id')->orderBy('user_exams.exam_id', 'desc')
-            ->where('user_exams.user_id', auth()->id())
+            ->join('examens', 'user_exams.exam_id', '=', 'examens.id')
+            ->orderBy('user_exams.exam_id', 'desc')
+            ->where('user_exams.user_id', $user->id)
             ->where('user_exams.std_status', '1')
-            ->get()->toArray();
+            ->get()
+            ->toArray();
 
-        $totalquizs = User_exam::where('user_id', auth()->id())
+        $totalquizs = User_exam::where('user_id', $user->id)
             ->where('std_status', 1)
             ->count();
-        //$student_info = User_exam::all();
-        //   dd($student_info);
+
         return view('front.comptes.account', $data, compact(
             'totalZoomMeetings',
             'student_info',
@@ -157,14 +186,62 @@ class MyAccountController extends Controller
             'inscriptionsEnCours',
             'comments',
             'inscriptions',
+            'contenuInscriptions',
             'onlineClasses',
             'totalDocuments',
-            'documents'
+            'documents',
+            'formations'
         ));
     }
 
+    /**
+     * Traitement de l'évaluation d'une formation
+     */public function evaluateTeacher(Request $request, $formationId)
+{
+    // 1. On récupère la formation et son responsable
+    $formation = Formation::with('responsable')->findOrFail($formationId);
 
+    // Vérification que le responsable existe bien
+    $teacherId = $formation->responsable_id 
+        ?? $formation->responsable->id 
+        ?? $formation->user_id;
 
+    if (!$teacherId) {
+        return redirect()->back()->with('error', 'Aucun responsable associé à cette formation.');
+    }
+
+    // 2. Validation (retrait du teacher_id car il est récupéré côté serveur)
+    $request->validate([
+        'rating'       => 'required|integer|min:1|max:5',
+        'comment'      => 'nullable|string|max:1000',
+        'is_anonymous' => 'nullable|boolean',
+        'badges'       => 'nullable|array',
+        'badges.*'     => 'exists:badges,id',
+    ]);
+
+    // 3. Enregistrement / Mise à jour
+    $evaluation = TeacherEvaluation::updateOrCreate(
+        [
+            'student_id' => auth()->id(),
+            'teacher_id' => $teacherId,
+        ],
+        [
+            'rating'       => $request->rating,
+            'comment'      => $request->comment,
+            'is_anonymous' => $request->boolean('is_anonymous'),
+            'is_approved'  => false,
+        ]
+    );
+
+    // 4. Synchronisation des badges
+    if ($request->has('badges')) {
+        $evaluation->badges()->sync($request->input('badges', []));
+    } else {
+        $evaluation->badges()->detach();
+    }
+
+    return redirect()->back()->with('success', 'Votre évaluation a bien été enregistrée !');
+}
     public function delecomment($id)
     {
         $comment = Comment::findOrFail($id);

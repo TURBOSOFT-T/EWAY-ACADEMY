@@ -16,6 +16,9 @@ class TeacherEvaluation extends Model
      *
      * @var array<int, string>
      */
+
+    protected $guarded = [];
+
     protected $fillable = [
         'student_id',
         'teacher_id',
@@ -92,4 +95,12 @@ public function evaluations(): BelongsToMany
     return $this->belongsToMany(TeacherEvaluation::class, 'evaluation_badge')
                 ->using(EvaluationBadge::class);
 }
+
+
+  
+
+   
+
+
+
 }

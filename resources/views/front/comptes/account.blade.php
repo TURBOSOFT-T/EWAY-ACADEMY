@@ -35,7 +35,7 @@
                                             {{ \App\Helpers\TranslationHelper::TranslateText('Mes Inscriptions') }}</a>
 
 
-                                       <!--  <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-meet" role="tab" aria-selected="false"><i class="fas fa-video" style="font-size: 20px; color: #9b59b6;"></i>
+                                        <!--  <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-meet" role="tab" aria-selected="false"><i class="fas fa-video" style="font-size: 20px; color: #9b59b6;"></i>
                                             {{ \App\Helpers\TranslationHelper::TranslateText('Mes Meets') }}
 
                                             @if (isset($totalZoomMeetings) && $totalZoomMeetings > 0)
@@ -43,6 +43,11 @@
                                             @endif
                                         </a>
  -->
+
+                                        <a class="nav-item nav-link" data-bs-toggle="tab" href="#nav-courses" role="tab" aria-selected="false">
+                                            <i class="fas fa-graduation-cap me-2"></i>
+                                            {{ \App\Helpers\TranslationHelper::TranslateText('Mes Formations') }}
+                                        </a>
 
                                         <a class="nav-item nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#nav-documents" role="tab" aria-selected="false">
                                             <i class="fas fa-file-alt" style="font-size: 20px; color: #2c3e50;"></i>
@@ -53,7 +58,7 @@
                                             @endif
                                         </a>
 
-                                       <!--  <a class="nav-item nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#nav-quizs" role="tab" aria-selected="false">
+                                        <!--  <a class="nav-item nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#nav-quizs" role="tab" aria-selected="false">
                                             <i class="fas fa-question-circle" style="font-size: 20px; color: #2c3e50;"></i>
                                             {{ \App\Helpers\TranslationHelper::TranslateText('Mes Quiz') }}
 
@@ -142,7 +147,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
-<!-- 
+                                    <!-- 
                                     <div class="col-md-4 col-sm-6">
                                       
                                         <div class="dashboard-card shadow-lg rounded-3 p-3 bg-white text-dark position-relative overflow-hidden wow fadeInDown" data-wow-duration="1.5s" data-wow-delay=".6s" style="border-left: 5px solid #3498db; transition: all 0.3s ease;">
@@ -245,22 +250,139 @@
 
                     <br>
                 </div>
-             <div class="tab-pane fade" id="nav-orders" role="tabpanel">
-    <div class="axil-dashboard-order">
-        <div class="table-responsive">
-           @livewire('user-dashboard', ['inscriptions' => $inscriptions])
+                <div class="tab-pane fade" id="nav-orders" role="tabpanel">
+                    <div class="axil-dashboard-order">
+                        <div class="table-responsive">
+                            @livewire('user-dashboard', ['inscriptions' => $inscriptions])
 
-            <!-- Pagination -->
-            <div class="table-pagination mt-4">
-                <nav class="shop-pagination">
-                    <ul class="pagination-list d-flex justify-content-center">
-                        {{ $inscriptions->links('pagination::bootstrap-4') }}
-                    </ul>
-                </nav>
+                            <!-- Pagination -->
+                            <div class="table-pagination mt-4">
+                                <nav class="shop-pagination">
+                                    <ul class="pagination-list d-flex justify-content-center">
+                                        {{ $inscriptions->links('pagination::bootstrap-4') }}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: FORMATIONS & EVALUATIONS -->
+                <div class="tab-pane fade" id="nav-courses" role="tabpanel">
+                    <div class="axil-dashboard-order">
+                        <h5 class="mb-3">{{ \App\Helpers\TranslationHelper::TranslateText('Mes Formations & Responsables') }}</h5>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">{{ \App\Helpers\TranslationHelper::TranslateText('Formation') }}</th>
+                                        <th scope="col">{{ \App\Helpers\TranslationHelper::TranslateText('Responsable / Formateur') }}</th>
+                                         <th scope="col">{{ \App\Helpers\TranslationHelper::TranslateText('Évaluation') }}</th>
+                                        <th scope="col" class="text-end">{{ \App\Helpers\TranslationHelper::TranslateText('Action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($formations ?? [] as $formation)
+                                    <tr>
+                                        <td class="fw-bold">{{ $formation->titre ?? $formation->nom }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar me-2 rounded-circle bg-light text-primary d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                    <i class="fas fa-user-tie"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="d-block fw-semibold">{{ $formation->instructor_name ?? $formation->responsable->nom ?? 'Non assigné' }}
+                                                        {{ $formation->instructor_name ?? $formation->responsable->prenom ?? 'Non assigné' }}
+                                                    </span>
+                                                    <small class="text-muted">{{ $formation->instructor_email ?? $formation->responsable->email ?? '' }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        
+                                       <td>
+    @if (!is_null($formation->evaluation?->rating) && $formation->evaluation?->rating > 0)
+        <div class="text-warning d-flex align-items-center">
+            <div class="me-1">
+                @for ($i = 1; $i <= 5; $i++)
+                    <i class="{{ $i <= $formation->evaluation->rating ? 'fas' : 'far' }} fa-star"></i>
+                @endfor
             </div>
+            <small class="text-muted ms-1">({{ $formation->evaluation->rating }}/5)</small>
         </div>
-    </div>
-</div>
+    @else
+        <span class="badge bg-light text-dark border">
+            {{ \App\Helpers\TranslationHelper::TranslateText('Non évaluée') }}
+        </span>
+    @endif
+</td>
+                                        <td class="text-end">
+                                            <button class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#evaluateModal{{ $formation->id }}">
+                                                <i class="fas fa-star me-1"></i>
+                                                {{ isset($formation->user_rating) ? \App\Helpers\TranslationHelper::TranslateText('Modifier') : \App\Helpers\TranslationHelper::TranslateText('Évaluer') }}
+                                            </button>
+
+                                            <!-- Modal Évaluation -->
+                                            <div class="modal fade text-start" id="evaluateModal{{ $formation->id }}" tabindex="-1" aria-labelledby="evaluateModalLabel{{ $formation->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <form action="{{ route('formations.evaluate', $formation->id) }}" method="POST">
+                                                            @csrf
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="evaluateModalLabel{{ $formation->id }}">
+                                                                    {{ \App\Helpers\TranslationHelper::TranslateText('Évaluer la formation') }} : {{ $formation->title ?? $formation->nom }}
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p class="mb-2 text-muted">
+                                                                    <strong>{{ \App\Helpers\TranslationHelper::TranslateText('Responsable') }}:</strong>
+                                                                    {{ $formation->instructor_name ?? $formation->responsable->nom ?? 'N/A' }}
+
+                                                                </p>
+
+                                                                <!-- Note par étoiles -->
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-bold">{{ \App\Helpers\TranslationHelper::TranslateText('Note (sur 5 étoiles)') }}</label>
+                                                                    <select name="rating" class="form-select" required>
+                                                                        <option value="">-- {{ \App\Helpers\TranslationHelper::TranslateText('Choisir une note') }} --</option>
+                                                                        <option value="5" {{ ($formation->user_rating ?? '') == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (5/5) - Excellent</option>
+                                                                        <option value="4" {{ ($formation->user_rating ?? '') == 4 ? 'selected' : '' }}>⭐⭐⭐⭐ (4/5) - Très bon</option>
+                                                                        <option value="3" {{ ($formation->user_rating ?? '') == 3 ? 'selected' : '' }}>⭐⭐⭐ (3/5) - Moyen</option>
+                                                                        <option value="2" {{ ($formation->user_rating ?? '') == 2 ? 'selected' : '' }}>⭐⭐ (2/5) - Insatisfaisant</option>
+                                                                        <option value="1" {{ ($formation->user_rating ?? '') == 1 ? 'selected' : '' }}>⭐ (1/5) - Très mauvais</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <!-- Commentaire -->
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-bold">{{ \App\Helpers\TranslationHelper::TranslateText('Votre avis / Remarques') }}</label>
+                                                                    <textarea name="comment" class="form-control" rows="4" placeholder="{{ \App\Helpers\TranslationHelper::TranslateText('Partagez votre retour sur la qualité du contenu et du responsable...') }}">{{ $formation->user_review ?? '' }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ \App\Helpers\TranslationHelper::TranslateText('Annuler') }}</button>
+                                                                <button type="submit" class="btn btn-primary">{{ \App\Helpers\TranslationHelper::TranslateText('Soumettre l\'évaluation') }}</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Fin Modal -->
+
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4 text-muted">
+                                            {{ \App\Helpers\TranslationHelper::TranslateText('Aucune formation inscrite pour le moment.') }}
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="nav-comments" role="tabpanel">
                     <div class="axil-dashboard-order">
                         <p> {{ \App\Helpers\TranslationHelper::TranslateText('Mes Commentaires') }}</p>
